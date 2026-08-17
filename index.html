@@ -208,6 +208,48 @@ section.sec.tight{padding:72px 0}
 .fnote{font-size:11px;color:var(--mut)}
 .card.dark .fnote{color:var(--mut-d)}
 
+/* ---------- news ---------- */
+.ngrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.ngrid.three{grid-template-columns:repeat(3,1fr)}
+.ncard{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;color:var(--tx);transition:transform .25s,box-shadow .25s}
+.ncard:hover{transform:translateY(-5px);box-shadow:0 22px 44px rgba(10,12,20,.13)}
+.ncard.big{grid-column:span 2;flex-direction:row}
+.ncov{position:relative;margin:10px 10px 0;border-radius:12px;overflow:hidden;aspect-ratio:16/10;background:var(--ink);flex:none}
+.ncov img,.ncov svg{width:100%;height:100%;object-fit:cover}
+.ncov .bdg{position:absolute;top:11px;left:11px}
+.ncard.big .ncov{width:46%;aspect-ratio:auto;margin:10px 0 10px 10px}
+.nbody{padding:18px 20px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
+.nmeta{display:flex;gap:14px;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--mut)}
+.ncard h3{font-size:21px;line-height:1.15}
+.ncard.big h3{font-size:28px}
+.ncard p{font-size:14px;color:var(--mut);line-height:1.55;flex:1}
+.nlink{display:inline-flex;align-items:center;gap:10px;font-size:13.5px;font-weight:500;margin-top:2px}
+.nlink .ic{width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;transition:transform .25s}
+.nlink .ic svg{width:11px;height:11px}
+.ncard:hover .nlink .ic{transform:rotate(45deg)}
+
+.phead.art h1{max-width:22ch}
+.ameta{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:20px;font-size:13px;color:rgba(255,255,255,.6)}
+.acov{border-radius:18px;overflow:hidden;aspect-ratio:21/9;margin-top:-40px;position:relative;z-index:3;background:var(--ink)}
+.acov img,.acov svg{width:100%;height:100%;object-fit:cover}
+.article{max-width:720px;margin:0 auto;padding:44px 0 72px}
+.article .alead{font-size:21px;line-height:1.5;color:var(--tx);margin-bottom:28px;letter-spacing:-.01em}
+.article h2{font-size:27px;margin:38px 0 14px}
+.article p{font-size:17px;line-height:1.7;color:#2A2E3D;margin-bottom:18px}
+.article blockquote{border-left:3px solid var(--blue);padding:6px 0 6px 22px;margin:30px 0;font-size:21px;line-height:1.5;letter-spacing:-.02em}
+.atags{display:flex;gap:8px;flex-wrap:wrap;margin-top:34px}
+.acta{background:var(--ink);color:#fff;border-radius:20px;padding:30px;margin-top:38px;display:flex;gap:24px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.acta h3{font-size:24px;margin:12px 0 8px}
+.acta p{font-size:14.5px;color:rgba(255,255,255,.6);max-width:44ch;margin:0}
+
+@media(max-width:900px){
+  .ngrid,.ngrid.three{grid-template-columns:1fr}
+  .ncard.big{grid-column:auto;flex-direction:column}
+  .ncard.big .ncov{width:auto;aspect-ratio:16/10;margin:10px 10px 0}
+  .acov{aspect-ratio:16/9;margin-top:-24px}
+  .article{padding:32px 0 56px}
+}
+
 /* ---------- filters ---------- */
 .filters{background:#fff;border:1px solid var(--line);border-radius:18px;margin-bottom:24px;overflow:hidden}
 .frow{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:14px 16px}
@@ -905,6 +947,7 @@ function renderHeader(active){
       <a href="#/list" ${on('list')}>Sell a business</a>
       <a href="#/list">Raise capital</a>
       <a href="#/advisory" ${on('advisory')}>Advisory</a>
+      <a href="#/news" ${on('news')}>Insights</a>
     </nav>
     <span class="sp"></span>
     <a class="sign" href="#/login">Sign in</a>
@@ -928,6 +971,7 @@ function renderFooter(){
         <a href="#/advisory">About OKKO Capital</a>
         <a href="#/advisory">Sell-side advisory</a>
         <a href="#/advisory">Fundraising mandates</a>
+        <a href="#/news">Insights</a>
         <a href="#/account">Seller console</a>
       </div>
       <div><h4>Contact</h4>
@@ -1052,6 +1096,17 @@ function homePage(){
         <div class="step"><b class="n">Step 3</b><h3>Pick a package</h3><p>AED 499 a month, or AED 999 for three months. A flat listing fee, no commission on the deal.</p></div>
         <div class="step"><b class="n">Step 4</b><h3>Go live</h3><p>Moderation within 24 hours. Then your deal is in front of the Gulf’s buyer traffic.</p></div>
       </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-hd">
+        <div><p class="eyebrow">Insights</p><h2>Notes from the deal desk</h2>
+        <p class="sd">What we see across the deals we run: multiples, structures and the paperwork that decides them.</p></div>
+        <a class="btn btn-o" href="#/news">All insights${ic()}</a>
+      </div>
+      <div class="ngrid three">${NEWS.slice(0,3).map((n,i)=>newsCard(n,i,false)).join('')}</div>
     </div>
   </section>
 
@@ -1954,6 +2009,174 @@ function bindAcc(){
   document.querySelectorAll('.sw').forEach(s=>{s.onclick=()=>s.classList.toggle('on');s.onkeydown=e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();s.classList.toggle('on');}}});
 }
 
+/* =============== NEWS =============== */
+/* Covers: assets/news/<slug>.jpg — same fallback rules as the listings, a
+   drawn placeholder shows until a photo is dropped in. */
+const NEWS=[
+{
+  slug:'uae-sme-deals-h1-2026', cat:'Market', date:'August 12, 2026', read:'6 min',
+  author:'OKKO Capital', role:'Deal desk',
+  title:'What actually sold in the UAE this year — and at what multiple',
+  lead:'We looked at every small-business transaction we touched in the first half of 2026: 41 deals, from a AED 400K salon to a AED 21M logistics operator. The spread of multiples says more about the seller than about the sector.',
+  body:[
+    ['h','The median came in at 2.4× net profit'],
+    ['p','Across 41 completed transactions the median price landed at 2.4 times annual net profit, with a range from 1.1× to 4.6×. Sector explains less of that spread than most owners expect. A café in JBR and a café in Al Quoz can be two years of profit apart, and the difference is almost never the coffee.'],
+    ['p','What moves the multiple, in order of impact: how verifiable the numbers are, whether the business runs without the owner, how much of the lease term is left, and how clean the licence and visa file is. A business with POS-verified revenue and a manager in place trades a full turn higher than the same business with a shoebox of receipts.'],
+    ['q','The cheapest thing an owner can do to add a turn of profit to their price is to spend three months making the numbers checkable.'],
+    ['h','Kids and family kept its premium'],
+    ['p','Play centres, nurseries and party venues held the top of the range at 2.9–3.4×, driven by recurring memberships and the simple fact that footfall is easy to verify. Food and beverage sat at the bottom at 1.4–2.1×, where fit-out depreciates fast and staff turnover eats the handover.'],
+    ['p','Trade and logistics behaved differently again: buyers there price working capital, not profit, and the negotiation is usually about which receivables transfer.'],
+    ['h','Time to close is the real cost'],
+    ['p','Median time from listing to signed LOI was 74 days; from LOI to money in the account, another 38. The deals that broke that pattern had one thing in common — a data room ready on day one. Sellers who assembled documents after the first serious buyer appeared added an average of six weeks and, in four cases, lost the buyer entirely.']
+  ],
+  tags:['M&A','UAE','Valuation']
+},
+{
+  slug:'video-tour-sells-faster', cat:'Playbook', date:'August 4, 2026', read:'4 min',
+  author:'OKKO Capital', role:'Marketplace',
+  title:'A one-minute phone video is worth more than a professional photoshoot',
+  lead:'We ran both on the same listings. The polished photos looked better. The shaky phone walkthrough brought three times the qualified enquiries.',
+  body:[
+    ['h','Why it works'],
+    ['p','A buyer looking at an operating business is not buying an image, they are trying to answer three questions before they waste an afternoon: is it real, is it busy, and is it maintained. A walkthrough answers all three in sixty seconds. A styled photograph answers none of them, and experienced buyers know it.'],
+    ['h','What to film'],
+    ['p','Walk in through the customer entrance and keep walking. Show the front of house at a normal hour, not an empty one. Open the back: kitchen, storage, staff area. Point the camera at the equipment you are selling. End on the street outside so the buyer understands the location without a map.'],
+    ['q','Film it at the busiest hour you have. An empty venue at 10am reads as a failing venue, whatever the numbers say.'],
+    ['h','What kills it'],
+    ['p','Background music, captions, drone shots and anything that looks like an advertisement. The moment a video feels produced, it stops being evidence. Vertical, natural sound, no edit — that is the format that converts.']
+  ],
+  tags:['Listings','Conversion']
+},
+{
+  slug:'raising-for-a-branch-not-a-company', cat:'Capital', date:'July 27, 2026', read:'5 min',
+  author:'OKKO Capital', role:'Fundraising',
+  title:'Branch equity: the structure quietly funding Gulf retail expansion',
+  lead:'Instead of selling a stake in the whole company, operators are selling a stake in one specific location. Investors get a payback they can model on a spreadsheet, founders keep the group intact.',
+  body:[
+    ['h','How the structure works'],
+    ['p','The operator sets up the new branch as its own vehicle. Investors take a percentage of that vehicle, not of the parent, and receive a majority share of the branch net profit until their capital is returned. After payback, distributions revert to the agreed equity split, and an exit is usually priced off a group valuation at year three.'],
+    ['p','For an investor the appeal is legibility: one location, one P&L, a fit-out budget you can audit and a payback you can count in months. For an operator it is speed — the round closes on the strength of an existing branch rather than on a company-wide story.'],
+    ['h','What to check before writing a cheque'],
+    ['p','Whether the reference branch really is comparable: same mall tier, same catchment, same rent as a share of revenue. Who controls the capex budget and what happens if the fit-out overruns. Whether the operator can open a competing location a kilometre away. And how the exit is priced, because a group valuation at year three is where these structures usually get argued about.'],
+    ['q','The number that matters is not the projected return, it is the rent as a percentage of revenue at the reference site.']
+  ],
+  tags:['Equity','Retail','Structures']
+},
+{
+  slug:'due-diligence-checklist-uae', cat:'Playbook', date:'July 15, 2026', read:'7 min',
+  author:'OKKO Capital', role:'Deal desk',
+  title:'The UAE due diligence file, in the order buyers ask for it',
+  lead:'Assemble it once, before you list. Every week you spend gathering documents after a buyer appears is a week the buyer spends looking at something else.',
+  body:[
+    ['h','First hour: is this real'],
+    ['p','Trade licence and its expiry, tenancy contract with the remaining term, the last three months of POS or bank statements, and the establishment card. Nothing more. This packet either answers the question or ends the conversation, and both outcomes are useful.'],
+    ['h','First week: is it worth the price'],
+    ['p','Twelve months of P&L by month, a revenue breakdown by stream, a payroll list with visa status and end-of-service accrual, supplier contracts with terms, and the utility and service charges the buyer inherits. If revenue is seasonal, add the previous year so the buyer can see the shape rather than guess at it.'],
+    ['q','Sellers lose more value to missing paperwork than to hard negotiation.'],
+    ['h','Before signing: what transfers'],
+    ['p','Licence and its transfer route, the lease and the landlord’s consent, the rent deposit, equipment list with serial numbers, brand and social accounts, customer and membership database with a note on data consent, and any pending disputes. Write the handover plan into the SPA: who trains whom, for how long, and what the vendor is on the hook for after close.']
+  ],
+  tags:['Due diligence','Legal']
+},
+{
+  slug:'okko-cap-launch', cat:'Company', date:'July 1, 2026', read:'3 min',
+  author:'OKKO Capital', role:'Company',
+  title:'Why we built a marketplace instead of another brokerage',
+  lead:'We have run sell-side mandates in Dubai for years. The mandate model works — for deals above a certain size. Everything below it had nowhere to go.',
+  body:[
+    ['p','A retained mandate makes sense when the fee can carry a team for three months. Under that threshold, an owner with a good business and a fair price ends up on classifieds full of dead listings and anonymous brokers, negotiating with people who were never going to buy anything.'],
+    ['h','One format, screened, direct'],
+    ['p','So we built the thing we wanted for those deals: a flat listing fee, a standard card every deal must fill in, moderation before anything goes live, and enquiries that land with the owner rather than with an intermediary. No commission on the transaction — we do not touch the money and never hold it.'],
+    ['q','If a deal outgrows the marketplace, the mandate desk is one door away. That is the point of having both under one roof.'],
+    ['p','The first cohort of listings is live now: a kids venue in City Walk, a play-centre network raising for two malls, the largest gaming club operator in MENA and an agro exporter financing working capital. Different shapes, same card.']
+  ],
+  tags:['Company','Marketplace']
+}
+];
+
+function newsCover(slug,i){
+  const pal=[['#0E1120','#2447E6'],['#1B1710','#C79A3E'],['#0B1A16','#2BB5A0'],['#160E1E','#7A4FD0'],['#141A22','#5B7BFF']];
+  const c=pal[(i||0)%pal.length];
+  return `<svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="">
+    <defs><linearGradient id="ng${i}" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="${c[0]}"/><stop offset="1" stop-color="${c[1]}" stop-opacity=".55"/></linearGradient></defs>
+    <rect width="400" height="250" fill="url(#ng${i})"/>
+    <g stroke="${c[1]}" stroke-opacity=".45" fill="none">
+      <path d="M-20 190 Q 100 120 200 165 T 420 130" stroke-width="2"/>
+      <path d="M-20 215 Q 110 150 210 190 T 420 155" stroke-width="1.2"/>
+    </g>
+    <circle cx="330" cy="70" r="46" fill="${c[1]}" fill-opacity=".18"/>
+    <circle cx="330" cy="70" r="8" fill="${c[1]}"/>
+  </svg>`;
+}
+function newsImg(n,i){
+  return `<img src="assets/news/${n.slug}.jpg" data-id="news/${n.slug}" data-n="0" data-e="0" data-news="${i}" alt="" loading="lazy" onerror="newsFail(this)">`;
+}
+function newsFail(el){
+  const e=+el.dataset.e+1;
+  if(e<EXT.length){el.dataset.e=e;el.src=`assets/news/${el.dataset.news!==undefined?NEWS[+el.dataset.news].slug:''}.${EXT[e]}`;return;}
+  const w=document.createElement('div'); w.style.cssText='width:100%;height:100%';
+  w.innerHTML=newsCover('',+el.dataset.news||0); el.replaceWith(w);
+}
+
+function newsCard(n,i,big){
+  return `<a class="ncard${big?' big':''}" href="#/news/${n.slug}">
+    <div class="ncov">${newsImg(n,i)}<span class="bdg bdg-chip">${n.cat}</span></div>
+    <div class="nbody">
+      <div class="nmeta"><span>${n.date}</span><span>${n.read} read</span></div>
+      <h3>${n.title}</h3>
+      <p>${big?n.lead:n.lead.split('. ')[0]+'.'}</p>
+      <span class="nlink">Read${ic()}</span>
+    </div>
+  </a>`;
+}
+
+function newsPage(){
+  return `
+  <div class="phead"><div class="grid-bg"></div><div class="glow"></div><div class="wrap">
+    <p class="eyebrow">Insights</p>
+    <div class="row"><h1>Notes from the deal desk</h1>
+      <p class="sub" style="max-width:40ch;margin-bottom:6px">What we see across the deals we run: valuations, structures and the paperwork that decides them.</p></div>
+  </div></div>
+  <section class="sec tight"><div class="wrap">
+    <div class="ngrid">${NEWS.map((n,i)=>newsCard(n,i,i===0)).join('')}</div>
+  </div></section>`;
+}
+
+function articlePage(slug){
+  const i=NEWS.findIndex(n=>n.slug===slug), n=NEWS[i];
+  if(!n) return `<div class="phead"><div class="grid-bg"></div><div class="wrap"><h1>Not found</h1>
+    <p class="sub">This piece is no longer here.</p><p style="margin-top:24px"><a class="btn btn-w" href="#/news">All insights${ic()}</a></p></div></div>`;
+  const rest=NEWS.filter(x=>x.slug!==slug).slice(0,3);
+  return `
+  <div class="phead art"><div class="grid-bg"></div><div class="glow"></div><div class="wrap">
+    <p class="crumb"><a href="#/news">Insights</a> &nbsp;/&nbsp; ${n.cat}</p>
+    <h1>${n.title}</h1>
+    <div class="ameta">
+      <span class="bdg bdg-chip">${n.cat}</span>
+      <span>${n.date}</span><span>${n.read} read</span><span>${n.author} · ${n.role}</span>
+    </div>
+  </div></div>
+  <div class="wrap">
+    <div class="acov">${newsImg(n,i)}</div>
+    <article class="article">
+      <p class="alead">${n.lead}</p>
+      ${n.body.map(b=>b[0]==='h'?`<h2>${b[1]}</h2>`:b[0]==='q'?`<blockquote>${b[1]}</blockquote>`:`<p>${b[1]}</p>`).join('')}
+      <div class="atags">${n.tags.map(t=>`<span class="chip">${t}</span>`).join('')}</div>
+      <div class="acta">
+        <div><p class="eyebrow">Live on the marketplace</p><h3>Four screened deals, one format</h3>
+          <p>Businesses for sale and companies raising capital — numbers, terms and documents in the same order on every card.</p></div>
+        <a class="btn btn-w btn-lg" href="#/market">Browse deals${ic()}</a>
+      </div>
+    </article>
+  </div>
+  <section class="sec tight"><div class="wrap">
+    <div class="sec-hd"><div><p class="eyebrow">Keep reading</p><h2>More from the desk</h2></div>
+      <a class="btn btn-o" href="#/news">All insights${ic()}</a></div>
+    <div class="ngrid three">${rest.map((x)=>newsCard(x,NEWS.indexOf(x),false)).join('')}</div>
+  </div></section>`;
+}
+
 /* =============== ADVISORY =============== */
 function advisoryPage(){
   return `
@@ -2015,6 +2238,8 @@ function route(){
     renderHeader('account');app.innerHTML=accountPage();bindAcc();
   }
   else if(h==='login'){renderHeader('login');app.innerHTML=loginPage();}
+  else if(h.startsWith('news/')){renderHeader('news');app.innerHTML=articlePage(h.slice(5));}
+  else if(h==='news'){renderHeader('news');app.innerHTML=newsPage();}
   else if(h==='advisory'){renderHeader('advisory');app.innerHTML=advisoryPage();}
   else{renderHeader('home');app.innerHTML=homePage();}
   window.scrollTo({top:0,behavior:'instant'});
