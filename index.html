@@ -489,6 +489,24 @@ tr.erow:hover td{background:#FAFAFC}
 .sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s}
 .sw.on{background:var(--blue)}
 .sw.on::after{transform:translateX(18px)}
+.chrow{display:flex;align-items:center;gap:14px;padding:16px;border:1px solid var(--line);border-radius:16px;margin-bottom:10px;background:#FBFBFD;flex-wrap:wrap}
+.chrow.on{background:#fff;border-color:var(--line)}
+.chrow .chi{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:none;color:#fff;font-weight:600}
+.chrow .chi.wa{background:#25D366}
+.chrow .chi.tg{background:#2AABEE}
+.chrow .chi.em{background:var(--ink)}
+.chrow b{font-weight:500;font-size:14.5px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.chrow span.sp{flex:1}
+.chrow>div>span{font-size:12.5px;color:var(--mut);display:block;margin-top:3px;max-width:60ch}
+.ladder{display:grid;gap:0;margin-bottom:18px;border-left:2px solid var(--line);padding-left:18px}
+.ladder div{padding:10px 0;position:relative}
+.ladder div::before{content:"";position:absolute;left:-24px;top:16px;width:9px;height:9px;border-radius:50%;background:var(--blue)}
+.ladder b{font-weight:500;font-size:14px;display:block}
+.ladder span{font-size:12.5px;color:var(--mut)}
+.wait{font-size:11px;font-weight:500;letter-spacing:.04em;padding:5px 10px;border-radius:99px;background:#EDEEF3;color:var(--mut);white-space:nowrap}
+.wait.warn{background:var(--bronze-t);color:#8A6A20}
+.wait.bad{background:#F6E7E6;color:#8E332E}
+.mch{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);display:inline-flex;align-items:center;gap:5px}
 .swrow{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
 .swrow:last-child{border-bottom:0}
 .swrow b{font-weight:500;font-size:14.5px;display:block}
@@ -1457,28 +1475,28 @@ const TPL=[
 ];
 const SLOTS=['Thu, Aug 19 · 11:00','Thu, Aug 19 · 16:30','Sat, Aug 21 · 10:00'];
 const ENQ=[
-  {id:'e1',name:'Sword House Ltd',who:'Family office · Dubai',listing:'Petit Paradis',ch:'Email',date:'Aug 16',ago:'2 h ago',st:'viewing',score:3,ticket:'AED 3–5M',horizon:'Ready to move in 30 days',nda:'Signed Aug 15',
+  {id:'e1',name:'Sword House Ltd',who:'Family office · Dubai',listing:'Petit Paradis',ch:'Email',date:'Aug 16',ago:'2 h ago',waited:2,st:'viewing',score:3,ticket:'AED 3–5M',horizon:'Ready to move in 30 days',nda:'Signed Aug 15',
    mail:'sales@swordhouse.ae',phone:'+971 50 118 4417',shared:true,
    thread:[['buyer','Aug 16 · 09:12','We are reviewing three kids-entertainment assets in Dubai and Petit Paradis is our first choice. Could we book a site visit this week and receive the POS export for the last 6 months?'],
      ['you','Aug 16 · 10:40','Thank you — the POS export is in the data room. Would Thursday 11:00 work for a visit?'],
      ['sys','Aug 16 · 10:41','Viewing proposed: Thu, Aug 19 · 11:00 — accepted by the buyer']]},
-  {id:'e2',name:'Ahmed R.',who:'Private buyer · Abu Dhabi',listing:'Petit Paradis',ch:'WhatsApp',date:'Aug 16',ago:'5 h ago',st:'new',score:2,ticket:'Up to AED 4M',horizon:'Exploring, 3–6 months',nda:'Not sent',
+  {id:'e2',name:'Ahmed R.',who:'Private buyer · Abu Dhabi',listing:'Petit Paradis',ch:'WhatsApp',date:'Aug 16',ago:'5 h ago',waited:26,st:'new',score:2,ticket:'Up to AED 4M',horizon:'Exploring, 3–6 months',nda:'Not sent',
    mail:'ahmed.r@gmail.com',phone:'+971 55 902 1330',shared:false,
    thread:[['buyer','Aug 16 · 06:20','Is the asking price negotiable if we close quickly? Also, does the manager stay on after the sale?']]},
-  {id:'e3',name:'Priya S.',who:'Investor · Dubai',listing:'Petit Paradis',ch:'Form',date:'Aug 15',ago:'1 day ago',st:'nda',score:3,ticket:'AED 3.5M',horizon:'Cash, no financing',nda:'Signed Aug 15',
+  {id:'e3',name:'Priya S.',who:'Investor · Dubai',listing:'Petit Paradis',ch:'Form',date:'Aug 15',ago:'1 day ago',waited:26,st:'nda',score:3,ticket:'AED 3.5M',horizon:'Cash, no financing',nda:'Signed Aug 15',
    mail:'priya@sharma.co',phone:'+971 52 778 8140',shared:true,
    thread:[['buyer','Aug 15 · 12:02','Please give me access to the presentation and financials.'],
      ['sys','Aug 15 · 12:03','Contacts left — presentation and financials unlocked automatically'],
      ['sys','Aug 15 · 16:30','NDA signed — full data room access granted'],
      ['buyer','Aug 15 · 16:35','NDA signed. Please share the lease agreement and the membership base breakdown.']]},
-  {id:'e4',name:'Omar K.',who:'Operator · Sharjah',listing:'Petit Paradis',ch:'Form',date:'Aug 12',ago:'4 days ago',st:'replied',score:2,ticket:'AED 2–3M',horizon:'Needs bank financing',nda:'Not sent',
+  {id:'e4',name:'Omar K.',who:'Operator · Sharjah',listing:'Petit Paradis',ch:'Form',date:'Aug 12',ago:'4 days ago',waited:3,st:'replied',score:2,ticket:'AED 2–3M',horizon:'Needs bank financing',nda:'Not sent',
    mail:'omar@kalbaholding.ae',phone:'+971 56 312 0044',shared:false,
    thread:[['buyer','Aug 12 · 08:15','I run two nurseries in Sharjah and I am looking to add a play venue. What is the rent and how many years are left on the lease?'],
      ['you','Aug 12 · 09:00','Rent is 26% of revenue with four years left on the lease, renewable. Happy to walk you through the numbers.']]},
-  {id:'e5',name:'Elena V.',who:'Private buyer · Dubai',listing:'Petit Paradis',ch:'Form',date:'Aug 10',ago:'6 days ago',st:'lost',score:1,ticket:'Under AED 1M',horizon:'Budget mismatch',nda:'Not sent',
+  {id:'e5',name:'Elena V.',who:'Private buyer · Dubai',listing:'Petit Paradis',ch:'Form',date:'Aug 10',ago:'6 days ago',waited:0,st:'lost',score:1,ticket:'Under AED 1M',horizon:'Budget mismatch',nda:'Not sent',
    mail:'elena.v@outlook.com',phone:'+971 54 660 2211',shared:false,
    thread:[['buyer','Aug 10 · 19:40','Beautiful venue, but our budget is well below the asking price. Please keep me in mind for smaller assets.']]},
-  {id:'e6',name:'Gulf Leisure Group',who:'Strategic · Riyadh',listing:'Petit Paradis',ch:'Email',date:'Aug 8',ago:'8 days ago',st:'loi',score:3,ticket:'AED 3.5M',horizon:'LOI signed, DD running',nda:'Signed Aug 6',
+  {id:'e6',name:'Gulf Leisure Group',who:'Strategic · Riyadh',listing:'Petit Paradis',ch:'Email',date:'Aug 8',ago:'8 days ago',waited:1,st:'loi',score:3,ticket:'AED 3.5M',horizon:'LOI signed, DD running',nda:'Signed Aug 6',
    mail:'m.alharbi@gulfleisure.sa',phone:'+966 55 410 7788',shared:true,
    thread:[['buyer','Aug 5 · 11:00','We would like to move quickly. Can you send the teaser and the last 12 months of revenue?'],
      ['sys','Aug 6 · 14:20','NDA signed — full data room access granted'],
@@ -1524,6 +1542,8 @@ const INVOICES=[['INV-2026-0812','Aug 1, 2026','Marketplace listing · 1 month',
   ['INV-2026-0714','Jul 1, 2026','Marketplace listing · 1 month','AED 523.95','Paid'],
   ['INV-2026-0616','Jun 1, 2026','Marketplace listing · 1 month','AED 523.95','Paid']];
 const ACC={tab:'overview',f:'all',open:null};
+const WA_ICON='<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1a13 13 0 0 1-5.6-4.9c-.4-.6-.9-1.5-.9-2.4 0-.9.5-1.4.7-1.6.2-.2.4-.3.6-.3h.4c.2 0 .4 0 .5.4l.7 1.7c.1.1.1.3 0 .5l-.3.4-.3.3c-.1.1-.2.3 0 .5.2.4.8 1.2 1.6 1.9 1 .9 1.8 1.1 2 1.2.2.1.4.1.5-.1l.7-.8c.2-.2.3-.2.5-.1l1.6.8c.3.1.4.2.5.3 0 .1 0 .5-.2 1Z"/></svg>';
+const TG_ICON='<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M21.9 4.3 18.9 19c-.2 1-.8 1.3-1.7.8l-4.6-3.4-2.2 2.1c-.3.3-.5.5-1 .5l.4-4.9 8.9-8c.4-.3-.1-.5-.6-.2L7.2 12.6 2.6 11.1c-1-.3-1-1 .2-1.5l18-6.9c.8-.3 1.5.2 1.1 1.6Z"/></svg>';
 const TABS=[['overview','Overview',''],['enquiries','Enquiries','2'],['listings','Listings',''],['analytics','Analytics',''],
   ['documents','Documents',''],['billing','Billing',''],['settings','Settings','']];
 
@@ -1551,6 +1571,15 @@ function funnelHTML(){
   <p class="note">Conversion view → enquiry <b>2.9%</b>, enquiry → NDA <b>24%</b>. Category median on OKKO CAP: 2.1% and 19%.</p>`;
 }
 function stPill(k){const s=ENQ_ST[k];return `<span class="st ${s.c}">${s.l}</span>`;}
+/* how long the buyer has been waiting for a first reply, and which rung of the
+   reminder ladder that is */
+function waitPill(e){
+  if(e.st!=='new') return '<span class="wait">Answered</span>';
+  const h=e.waited||0;
+  const cls=h>=24?'bad':h>=6?'warn':'';
+  const note=h>=24?'SLA breached':h>=6?'6 h reminder sent':h>=1?'1 h reminder sent':'just in';
+  return `<span class="wait ${cls}">${h} h · ${note}</span>`;
+}
 function score(n){return `<span class="qs" title="Buyer quality">${[1,2,3].map(i=>`<i class="${i<=n?'on':''}"></i>`).join('')}</span>`;}
 
 function accountPage(){
@@ -1633,12 +1662,13 @@ function enqTab(){
       ${Object.entries(ENQ_ST).map(([k,v])=>`<button data-f="${k}" class="${ACC.f===k?'on':''}">${v.l} · ${counts(k)}</button>`).join('')}
     </div>
     <div class="tblwrap" style="border:0"><table class="lst">
-      <tr><th>Buyer</th><th>Quality</th><th>Ticket</th><th>Channel</th><th>Received</th><th>Status</th></tr>
+      <tr><th>Buyer</th><th>Quality</th><th>Ticket</th><th>Channel</th><th>Received</th><th>Waiting</th><th>Status</th></tr>
       ${list.map(e=>`<tr class="erow" data-e="${e.id}">
         <td><b>${e.name}</b><br><span style="color:var(--mut);font-size:13px">${e.who}</span></td>
         <td>${score(e.score)}</td><td>${e.ticket}</td><td>${e.ch}</td>
         <td>${e.date}<br><span style="color:var(--mut);font-size:12.5px">${e.ago}</span></td>
-        <td>${stPill(e.st)}</td></tr>`).join('')||'<tr><td colspan="6" style="color:var(--mut)">No enquiries with this status.</td></tr>'}
+        <td>${waitPill(e)}</td>
+        <td>${stPill(e.st)}</td></tr>`).join('')||'<tr><td colspan="7" style="color:var(--mut)">No enquiries with this status.</td></tr>'}
     </table></div>
   </div>
   <p class="note">Quality is scored by OKKO CAP from the buyer’s stated ticket, timeline and history on the platform. It is guidance, not a guarantee.</p>`;
@@ -1779,11 +1809,57 @@ function settingsTab(){
     <div style="margin-top:20px"><button class="btn btn-d btn-sm">Save changes${ic()}</button></div>
   </div>
   <div class="panel">
-    <div class="ph"><div><h3>Notifications</h3><p class="sub">Where a new enquiry reaches you.</p></div></div>
-    <div class="swrow"><span><b>New enquiry — email</b><span>Instant, with the buyer’s message and quality score</span></span><span class="sp"></span><span class="sw on" role="switch" tabindex="0"></span></div>
-    <div class="swrow"><span><b>New enquiry — WhatsApp</b><span>Instant push to +971 50 118 4420</span></span><span class="sp"></span><span class="sw on" role="switch" tabindex="0"></span></div>
-    <div class="swrow"><span><b>NDA signed</b><span>When a buyer unlocks the data room</span></span><span class="sp"></span><span class="sw on" role="switch" tabindex="0"></span></div>
-    <div class="swrow"><span><b>Weekly performance digest</b><span>Views, enquiries and how you compare to the category</span></span><span class="sp"></span><span class="sw" role="switch" tabindex="0"></span></div>
+    <div class="ph"><div><h3>Your channels</h3><p class="sub">Connect the WhatsApp and Telegram you already use. Enquiries arrive there, you answer from your phone as usual, and the buyer gets your reply — nobody sees anybody’s number.</p></div></div>
+
+    <div class="chrow on">
+      <span class="chi wa">${WA_ICON}</span>
+      <div>
+        <b>WhatsApp · +971 50 118 4420 <span class="st st-live">Primary</span></b>
+        <span>Connected Aug 12 · you reply straight from the WhatsApp app on your phone</span>
+      </div>
+      <span class="sp"></span>
+      <button class="btn btn-o btn-sm" onclick="alert('Send a test message — prototype')">Test${ic()}</button>
+      <button class="btn btn-o btn-sm" onclick="alert('Disconnect — prototype')">Disconnect${ic()}</button>
+    </div>
+
+    <div class="chrow">
+      <span class="chi tg">${TG_ICON}</span>
+      <div>
+        <b>Telegram</b>
+        <span>Not connected. Each enquiry becomes its own topic in a private group — handy when a partner or a manager helps you.</span>
+      </div>
+      <span class="sp"></span>
+      <button class="btn btn-d btn-sm" onclick="alert('Opens t.me/okkocap_bot?start=… — prototype')">Connect${ic()}</button>
+    </div>
+
+    <div class="chrow">
+      <span class="chi em">@</span>
+      <div>
+        <b>Email · maria@petitparadis.ae</b>
+        <span>Always on. Replies you send by email land in the same thread.</span>
+      </div>
+      <span class="sp"></span>
+      <span class="st st-live">Verified</span>
+    </div>
+
+    <p class="note">Want the buyer to see <b>your</b> number and brand instead of OKKO CAP? That needs your number on the WhatsApp Business Platform — it then works from this console instead of the phone app. <a href="#/advisory" class="lnk">Talk to us</a> before switching.</p>
+  </div>
+
+  <div class="panel">
+    <div class="ph"><div><h3>Reminders</h3><p class="sub">We nudge you in your own channel while a buyer is waiting, and stop the moment you reply.</p></div></div>
+    <div class="ladder">
+      <div><b>1 hour</b><span>“Ahmed is still waiting” — a quiet nudge</span></div>
+      <div><b>6 hours</b><span>Nudge plus the number: after six hours buyers reply half as often</span></div>
+      <div><b>24 hours</b><span>Marked as breached in the console; the buyer gets “the owner will come back shortly” so you don’t lose them</span></div>
+      <div><b>48 hours</b><span>The OKKO CAP team is notified and may call you</span></div>
+    </div>
+    <div class="swrow"><span><b>Reminders about unanswered enquiries</b><span>The ladder above</span></span><span class="sp"></span><span class="sw on" role="switch" tabindex="0"></span></div>
+    <div class="swrow"><span><b>NDA signed but documents not opened</b><span>Two hours after signing</span></span><span class="sp"></span><span class="sw on" role="switch" tabindex="0"></span></div>
+    <div class="swrow"><span><b>Viewing reminders</b><span>A day before and two hours before</span></span><span class="sp"></span><span class="sw on" role="switch" tabindex="0"></span></div>
+    <div class="swrow"><span><b>Listing expiry</b><span>Three days before the subscription renews</span></span><span class="sp"></span><span class="sw on" role="switch" tabindex="0"></span></div>
+    <div class="swrow"><span><b>Weekly performance digest</b><span>Monday morning: views, enquiries, how you compare</span></span><span class="sp"></span><span class="sw" role="switch" tabindex="0"></span></div>
+    <div class="swrow"><span><b>Quiet hours</b><span>Nothing is sent between 22:00 and 08:00, Asia/Dubai — it waits for the morning</span></span><span class="sp"></span>
+      <select class="stx"><option>22:00 → 08:00</option><option>23:00 → 07:00</option><option>Off</option></select></div>
   </div>
   <div class="panel">
     <div class="ph"><div><h3>Team access</h3><p class="sub">Invite a partner or your accountant. Advisors from OKKO CAP appear here when you sign a mandate.</p></div>

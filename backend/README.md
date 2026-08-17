@@ -63,3 +63,47 @@ never breaks while the backend is being set up.
 
 Point the domain at the host that serves `index.html` (Vercel, Netlify, Cloudflare
 Pages — all free for this). DNS records are in the root README.
+
+## The bridge (how the seller keeps their own WhatsApp / Telegram)
+
+The buyer never gets the seller's number and the seller never gets the buyer's,
+yet the seller answers from the phone app they already use:
+
+    buyer  ──►  platform number / bot  ──►  seller's own WhatsApp or Telegram
+    buyer  ◄──  platform number / bot  ◄──  seller swipes to reply
+
+`relay_map` remembers which message we sent to the seller belongs to which lead:
+WhatsApp returns `context.id` of the quoted message, Telegram returns the forum
+topic id. Both resolve to a lead, so the reply is relayed to the right buyer and
+mirrored into `lead_messages` — the console shows one thread per lead with a
+channel badge on every message.
+
+Setup per seller: Settings → Channels → "Connect". WhatsApp sends them a
+six-digit code from the platform number; Telegram opens `t.me/<bot>?start=s_<code>`.
+Nothing moves, nothing migrates, their number stays in the phone app.
+
+An upgrade path exists for businesses that want their own number and brand in
+front of the buyer: their number goes onto the WhatsApp Business Platform
+(`seller_channels.own_waba_id` / `own_phone_id`) — but then it stops working in
+the phone app and they answer from the console.
+
+## Reminders
+
+`schema_channels.sql` schedules a ladder the moment a lead lands, and cancels it
+on the first reply:
+
+| Rule | When | Who gets it |
+|---|---|---|
+| `lead_1h` | 1 hour | seller, in their own channel |
+| `lead_6h` | 6 hours | seller + email |
+| `lead_24h` | 24 hours | seller; console marks the lead as breached |
+| `buyer_24h` | 24 hours | buyer: "the owner will come back shortly" |
+| `lead_48h` | 48 hours | OKKO CAP team |
+| `nda_docs` | 2 h after an NDA with no download | seller |
+| `viewing_24h` / `viewing_2h` | before a viewing | seller |
+| `listing_expiry` | 3 days before renewal | seller |
+| `moderation_48h` | comment left unfixed | seller |
+
+Quiet hours (22:00–08:00 Asia/Dubai by default) hold everything until morning.
+`send-reminders` runs every five minutes from pg_cron (`cron.sql`) and picks the
+seller's primary channel, falling back to email.
