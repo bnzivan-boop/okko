@@ -62,9 +62,7 @@ create table notification_prefs (
   nda_signed     boolean not null default true,
   weekly_digest  boolean not null default false,
   reminders      boolean not null default true,
-  quiet_from     time not null default '22:00',
-  quiet_to       time not null default '08:00',
-  timezone       text not null default 'Asia/Dubai'
+  timezone       text not null default 'Asia/Dubai'   -- for timestamps in digests only
 );
 
 -- ---------------------------------------------------------------- reminders
@@ -78,12 +76,15 @@ create table reminder_rules (
   active      boolean not null default true
 );
 
+-- The buyer is never told that the seller is slow: nothing in this ladder goes
+-- to the buyer's side. At 48 hours the seller is offered a mandate and the OKKO
+-- team is told, so a stalling deal gets picked up by a human instead.
 insert into reminder_rules (code, after_mins, audience, body) values
   ('lead_1h',   60,   'seller', '{{buyer}} sent an enquiry on {{listing}} an hour ago and is still waiting. Reply right here — I will pass it on.'),
   ('lead_6h',   360,  'seller', '{{buyer}} has been waiting 6 hours on {{listing}}. Buyers answered after six hours reply half as often.'),
   ('lead_24h',  1440, 'seller', '24 hours without an answer to {{buyer}} on {{listing}}. This is the point where most deals go cold.'),
-  ('buyer_24h', 1440, 'buyer',  'Thank you for your interest in {{listing}} — the owner has your request and will come back to you shortly.'),
-  ('lead_48h',  2880, 'admin',  '{{listing}}: enquiry from {{buyer}} unanswered for 48 hours. Worth a call to the owner.'),
+  ('mandate_48h', 2880, 'seller', '{{buyer}} has been waiting two days on {{listing}}. If you would rather not run the conversations yourself, OKKO Capital can take the deal under a mandate: we qualify buyers, handle the calls and drive it to close. Reply MANDATE and we will call you.'),
+  ('lead_48h',  2880, 'admin',  '{{listing}}: enquiry from {{buyer}} unanswered for 48 hours. Mandate offer sent to the owner — worth a call.'),
   ('nda_docs',  120,  'seller', '{{buyer}} signed the NDA on {{listing}} 2 hours ago but has not opened the data room. Send the documents?'),
   ('viewing_24h', -1440, 'seller', 'Viewing with {{buyer}} on {{listing}} is tomorrow at {{time}}.'),
   ('viewing_2h',  -120,  'seller', 'Viewing with {{buyer}} in 2 hours.'),
@@ -112,7 +113,7 @@ create or replace function schedule_lead_reminders() returns trigger language pl
 declare r record;
 begin
   for r in select * from reminder_rules
-           where active and code in ('lead_1h','lead_6h','lead_24h','buyer_24h','lead_48h')
+           where active and code in ('lead_1h','lead_6h','lead_24h','mandate_48h','lead_48h')
   loop
     insert into reminders (rule, lead_id, listing_id, due_at)
     values (r.code, new.id, new.listing_id, new.created_at + make_interval(mins => r.after_mins))
@@ -130,7 +131,7 @@ begin
   if new.status is distinct from old.status and new.status <> 'new' then
     update reminders set state = 'cancelled'
     where lead_id = new.id and state = 'scheduled'
-      and rule in ('lead_1h','lead_6h','lead_24h','buyer_24h','lead_48h');
+      and rule in ('lead_1h','lead_6h','lead_24h','mandate_48h','lead_48h');
   end if;
   return new;
 end $$;
@@ -143,7 +144,7 @@ begin
   if new.author = 'seller' then
     update reminders set state = 'cancelled'
     where lead_id = new.lead_id and state = 'scheduled'
-      and rule in ('lead_1h','lead_6h','lead_24h','buyer_24h','lead_48h');
+      and rule in ('lead_1h','lead_6h','lead_24h','mandate_48h','lead_48h');
     update leads set status = case when status = 'new' then 'replied' else status end
     where id = new.lead_id;
   end if;
@@ -153,7 +154,8 @@ end $$;
 create trigger messages_cancel_reminders after insert on lead_messages
   for each row execute function cancel_on_reply();
 
--- What the worker picks up: due, still relevant, and outside quiet hours.
+-- What the worker picks up: due and still relevant. No quiet hours — a waiting
+-- buyer does not wait for office hours, so reminders go out around the clock.
 create or replace view due_reminders as
   select r.id, r.rule, r.lead_id, r.listing_id, rr.audience, rr.body,
          l.name as buyer, l.email as buyer_email, l.status as lead_status,
@@ -166,12 +168,7 @@ create or replace view due_reminders as
   where r.state = 'scheduled'
     and r.due_at <= now()
     and coalesce(np.reminders, true)
-    and (l.id is null or l.status = 'new')
-    and (np.user_id is null or
-         (now() at time zone coalesce(np.timezone,'Asia/Dubai'))::time
-           not between coalesce(np.quiet_from,'22:00') and time '23:59'
-         and (now() at time zone coalesce(np.timezone,'Asia/Dubai'))::time
-           not between time '00:00' and coalesce(np.quiet_to,'08:00'));
+    and (l.id is null or l.status = 'new');
 
 -- Response time, the number the console shows and the digest reports.
 create or replace function response_stats(l_id uuid)
@@ -208,3 +205,16 @@ create policy "own reminders" on reminders for select
   using (exists (select 1 from listings l where l.id = reminders.listing_id and can_edit_listing(l.id)));
 create policy "own relay" on relay_map for select
   using (exists (select 1 from leads l where l.id = relay_map.lead_id and can_edit_listing(l.listing_id)));
+
+-- The owner answered MANDATE to the 48-hour offer: OKKO Capital picks the deal up.
+create table mandate_requests (
+  id         uuid primary key default gen_random_uuid(),
+  user_id    uuid not null references profiles(id) on delete cascade,
+  listing_id uuid references listings(id) on delete set null,
+  source     text not null default 'telegram',
+  state      text not null default 'new',      -- new | called | signed | declined
+  created_at timestamptz not null default now()
+);
+alter table mandate_requests enable row level security;
+create policy "own mandate requests" on mandate_requests for select
+  using (user_id = auth.uid() or is_admin());

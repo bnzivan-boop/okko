@@ -85,6 +85,14 @@ Deno.serve(async (req) => {
   const { data: seller } = await db.from('seller_channels')
     .select('user_id').eq('channel', 'telegram').eq('external_id', chatId).maybeSingle();
 
+  // "MANDATE" from the 48-hour offer: the owner wants OKKO to run the deal
+  if (seller && /^\s*mandate\b/i.test(text)) {
+    await db.from('mandate_requests').insert({ user_id: seller.user_id, source: 'telegram' });
+    await tg('sendMessage', { chat_id: chatId,
+      text: 'Noted — the OKKO Capital team will call you today to scope the mandate.' });
+    return new Response('ok');
+  }
+
   if (seller && (threadId || replyTo)) {
     const { data: map } = await db.from('relay_map')
       .select('lead_id')

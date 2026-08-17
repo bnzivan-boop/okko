@@ -97,13 +97,15 @@ on the first reply:
 | `lead_1h` | 1 hour | seller, in their own channel |
 | `lead_6h` | 6 hours | seller + email |
 | `lead_24h` | 24 hours | seller; console marks the lead as breached |
-| `buyer_24h` | 24 hours | buyer: "the owner will come back shortly" |
+| `mandate_48h` | 48 hours | seller: offer to run the deal under a mandate — replying MANDATE in WhatsApp or Telegram files a `mandate_requests` row |
 | `lead_48h` | 48 hours | OKKO CAP team |
 | `nda_docs` | 2 h after an NDA with no download | seller |
 | `viewing_24h` / `viewing_2h` | before a viewing | seller |
 | `listing_expiry` | 3 days before renewal | seller |
 | `moderation_48h` | comment left unfixed | seller |
 
-Quiet hours (22:00–08:00 Asia/Dubai by default) hold everything until morning.
-`send-reminders` runs every five minutes from pg_cron (`cron.sql`) and picks the
-seller's primary channel, falling back to email.
+Nothing in the ladder reaches the buyer: they are never told that the seller is
+slow. There are no quiet hours either — a waiting buyer does not wait for office
+hours, so reminders go out round the clock. `send-reminders` runs every five
+minutes from pg_cron (`cron.sql`) and picks the seller's primary channel,
+falling back to email.

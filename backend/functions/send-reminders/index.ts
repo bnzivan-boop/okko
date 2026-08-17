@@ -73,9 +73,12 @@ Deno.serve(async () => {
       }
     }
 
-    if (r.audience === 'buyer' && r.buyer_email) {
-      ok = await mail(r.buyer_email, `${vars.listing} — we have your request`, `<p>${text}</p>`);
-      channel = 'email';
+    // Nothing in the ladder goes to the buyer — they are never told that the
+    // seller is slow. The rule set has no 'buyer' audience; this stays only so a
+    // future opt-in campaign has a place to live.
+    if (r.audience === 'buyer') {
+      await db.from('reminders').update({ state: 'skipped', error: 'buyer notifications are off' }).eq('id', r.id);
+      continue;
     }
 
     if (r.audience === 'admin') {

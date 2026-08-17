@@ -501,8 +501,9 @@ tr.erow:hover td{background:#FAFAFC}
 .ladder{display:grid;gap:0;margin-bottom:18px;border-left:2px solid var(--line);padding-left:18px}
 .ladder div{padding:10px 0;position:relative}
 .ladder div::before{content:"";position:absolute;left:-24px;top:16px;width:9px;height:9px;border-radius:50%;background:var(--blue)}
-.ladder b{font-weight:500;font-size:14px;display:block}
+.ladder>div>b{font-weight:500;font-size:14px;display:block}
 .ladder span{font-size:12.5px;color:var(--mut)}
+.ladder span b{display:inline;font-weight:600;color:var(--tx)}
 .wait{font-size:11px;font-weight:500;letter-spacing:.04em;padding:5px 10px;border-radius:99px;background:#EDEEF3;color:var(--mut);white-space:nowrap}
 .wait.warn{background:var(--bronze-t);color:#8A6A20}
 .wait.bad{background:#F6E7E6;color:#8E332E}
@@ -1848,18 +1849,18 @@ function settingsTab(){
   <div class="panel">
     <div class="ph"><div><h3>Reminders</h3><p class="sub">We nudge you in your own channel while a buyer is waiting, and stop the moment you reply.</p></div></div>
     <div class="ladder">
-      <div><b>1 hour</b><span>“Ahmed is still waiting” — a quiet nudge</span></div>
+      <div><b>1 hour</b><span>“Ahmed is still waiting” — a quiet nudge in your channel</span></div>
       <div><b>6 hours</b><span>Nudge plus the number: after six hours buyers reply half as often</span></div>
-      <div><b>24 hours</b><span>Marked as breached in the console; the buyer gets “the owner will come back shortly” so you don’t lose them</span></div>
-      <div><b>48 hours</b><span>The OKKO CAP team is notified and may call you</span></div>
+      <div><b>24 hours</b><span>Marked as breached in the console, so you see it at a glance</span></div>
+      <div><b>48 hours</b><span>We offer to take the deal under a mandate — answer <b>MANDATE</b> and the team calls you the same day. The OKKO CAP desk is notified too.</span></div>
     </div>
+    <p class="note" style="margin-top:0">The buyer is never told that you are slow — nothing in this ladder goes to their side.</p>
     <div class="swrow"><span><b>Reminders about unanswered enquiries</b><span>The ladder above</span></span><span class="sp"></span><span class="sw on" role="switch" tabindex="0"></span></div>
     <div class="swrow"><span><b>NDA signed but documents not opened</b><span>Two hours after signing</span></span><span class="sp"></span><span class="sw on" role="switch" tabindex="0"></span></div>
     <div class="swrow"><span><b>Viewing reminders</b><span>A day before and two hours before</span></span><span class="sp"></span><span class="sw on" role="switch" tabindex="0"></span></div>
     <div class="swrow"><span><b>Listing expiry</b><span>Three days before the subscription renews</span></span><span class="sp"></span><span class="sw on" role="switch" tabindex="0"></span></div>
     <div class="swrow"><span><b>Weekly performance digest</b><span>Monday morning: views, enquiries, how you compare</span></span><span class="sp"></span><span class="sw" role="switch" tabindex="0"></span></div>
-    <div class="swrow"><span><b>Quiet hours</b><span>Nothing is sent between 22:00 and 08:00, Asia/Dubai — it waits for the morning</span></span><span class="sp"></span>
-      <select class="stx"><option>22:00 → 08:00</option><option>23:00 → 07:00</option><option>Off</option></select></div>
+    <div class="swrow"><span><b>Round the clock</b><span>Reminders are sent whenever they come due — a waiting buyer does not wait for office hours</span></span><span class="sp"></span><span class="st st-live">Always on</span></div>
   </div>
   <div class="panel">
     <div class="ph"><div><h3>Team access</h3><p class="sub">Invite a partner or your accountant. Advisors from OKKO CAP appear here when you sign a mandate.</p></div>

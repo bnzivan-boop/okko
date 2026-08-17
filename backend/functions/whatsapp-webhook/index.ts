@@ -71,6 +71,17 @@ Deno.serve(async (req) => {
       }
     }
 
+    // "MANDATE" from the 48-hour offer
+    if (/^\s*mandate\b/i.test(text)) {
+      const { data: sc } = await db.from('seller_channels')
+        .select('user_id').eq('channel', 'whatsapp').eq('external_id', from).maybeSingle();
+      if (sc) {
+        await db.from('mandate_requests').insert({ user_id: sc.user_id, source: 'whatsapp' });
+        await send(from, 'Noted — the OKKO Capital team will call you today to scope the mandate.');
+        continue;
+      }
+    }
+
     // -------------------------------------------------- seller verifying a number
     const code = /(?:^|\s)(\d{6})(?:\s|$)/.exec(text)?.[1];
     if (code) {
