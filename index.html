@@ -20,6 +20,7 @@
   --bronze:#C79A3E; --bronze-t:#F7F0DE;
   --tx:#0E1018; --mut:#6A7086; --mut-d:#8E96B4; --line:#E3E5EC; --line-d:#22273F;
   --ok:#177A50; --okt:#E2F2EA;
+  --covh:clamp(220px,42vh,420px);
   --f:"Inter Tight","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -228,10 +229,10 @@ section.sec.tight{padding:72px 0}
 .nlink .ic svg{width:11px;height:11px}
 .ncard:hover .nlink .ic{transform:rotate(45deg)}
 
-.phead.art{padding-bottom:34px}
+.phead.art{padding-bottom:calc(var(--covh) / 2 + 34px)}
 .phead.art h1{max-width:22ch}
 .ameta{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:20px;font-size:13px;color:rgba(255,255,255,.6)}
-.acov{border-radius:18px;overflow:hidden;width:100%;height:clamp(220px,42vh,420px);margin-top:32px;position:relative;z-index:3;background:#0B0D16;border:1px solid rgba(255,255,255,.08)}
+.acov{border-radius:18px;overflow:hidden;width:100%;height:var(--covh);margin-top:calc(var(--covh) / -2);position:relative;z-index:3;background:#0B0D16;border:1px solid rgba(255,255,255,.08)}
 .acov img,.acov svg{width:100%;height:100%;object-fit:cover}
 .article{max-width:720px;margin:0 auto;padding:44px 0 72px}
 .article .alead{font-size:21px;line-height:1.5;color:var(--tx);margin-bottom:28px;letter-spacing:-.01em}
@@ -244,11 +245,11 @@ section.sec.tight{padding:72px 0}
 .acta p{font-size:14.5px;color:rgba(255,255,255,.6);max-width:44ch;margin:0}
 
 @media(max-width:900px){
+  :root{--covh:clamp(180px,32vh,300px)}
   .ngrid,.ngrid.three{grid-template-columns:1fr}
   .ncard.big{grid-column:auto;flex-direction:column}
   .ncard.big .ncov{width:auto;aspect-ratio:16/10;margin:10px 10px 0}
-  .phead.art{padding-bottom:26px}
-  .acov{height:clamp(180px,32vh,300px);margin-top:22px}
+  .phead.art{padding-bottom:calc(var(--covh) / 2 + 26px)}
   .article{padding:32px 0 56px}
 }
 
@@ -2158,9 +2159,9 @@ function articlePage(slug){
       <span class="bdg bdg-chip">${n.cat}</span>
       <span>${n.date}</span><span>${n.read} read</span><span>${n.author} · ${n.role}</span>
     </div>
-    <div class="acov">${newsImg(n,i)}</div>
   </div></div>
   <div class="wrap">
+    <div class="acov">${newsImg(n,i)}</div>
     <article class="article">
       <p class="alead">${n.lead}</p>
       ${n.body.map(b=>b[0]==='h'?`<h2>${b[1]}</h2>`:b[0]==='q'?`<blockquote>${b[1]}</blockquote>`:`<p>${b[1]}</p>`).join('')}
