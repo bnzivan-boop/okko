@@ -1,0 +1,1949 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>OKKO CAP — Marketplace</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#08090F; --ink2:#0E1120; --ink3:#161A2E;
+  --paper:#F2F3F7; --card:#FFFFFF;
+  --blue:#2447E6; --blue-d:#1A34AE; --blue-l:#7B93FF; --blue-t:#E8ECFC;
+  --bronze:#C79A3E; --bronze-t:#F7F0DE;
+  --tx:#0E1018; --mut:#6A7086; --mut-d:#8E96B4; --line:#E3E5EC; --line-d:#22273F;
+  --ok:#177A50; --okt:#E2F2EA;
+  --f:"Inter Tight","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--tx);font-family:var(--f);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--f);cursor:pointer;border:0;background:none;color:inherit}
+img,svg{display:block;max-width:100%}
+::selection{background:var(--blue);color:#fff}
+.wrap{max-width:1280px;margin:0 auto;padding:0 32px}
+.num{font-variant-numeric:tabular-nums}
+h1,h2,h3,h4{font-weight:600;letter-spacing:-.035em;line-height:1.02;text-wrap:balance}
+
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--blue);flex:none}
+.dk .eyebrow,.phead .eyebrow{color:var(--mut-d)}
+.dk .eyebrow::before,.phead .eyebrow::before{background:var(--blue-l)}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:12px;border-radius:99px;padding:9px 10px 9px 22px;font-size:14.5px;font-weight:500;letter-spacing:-.01em;white-space:nowrap;border:1px solid transparent;transition:background .2s,color .2s,border-color .2s,opacity .2s}
+.btn .ic{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;flex:none;transition:transform .25s}
+.btn:hover .ic{transform:rotate(45deg)}
+.btn .ic svg{width:12px;height:12px}
+.btn-w{background:#fff;color:var(--ink)}
+.btn-w .ic{background:var(--ink);color:#fff}
+.btn-w:hover{background:#E8EAF4}
+.btn-b{background:var(--blue);color:#fff}
+.btn-b .ic{background:rgba(255,255,255,.18);color:#fff}
+.btn-b:hover{background:var(--blue-d)}
+.btn-d{background:var(--ink);color:#fff}
+.btn-d .ic{background:rgba(255,255,255,.14);color:#fff}
+.btn-d:hover{background:var(--ink3)}
+.btn-gh{background:transparent;color:#fff;border-color:rgba(255,255,255,.22)}
+.btn-gh .ic{background:rgba(255,255,255,.1);color:#fff}
+.btn-gh:hover{border-color:rgba(255,255,255,.6)}
+.btn-o{background:transparent;color:var(--tx);border-color:var(--line)}
+.btn-o .ic{background:var(--tx);color:#fff}
+.btn-o:hover{border-color:var(--tx)}
+.btn-sm{padding:7px 8px 7px 18px;font-size:13.5px}
+.btn-sm .ic{width:26px;height:26px}
+.btn-lg{padding:11px 12px 11px 26px;font-size:16px}
+.btn-lg .ic{width:36px;height:36px}
+.btn.full{width:100%;justify-content:space-between}
+.btn[disabled]{opacity:.35;pointer-events:none}
+.btn:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--blue-l);outline-offset:3px}
+
+/* ---------- header ---------- */
+header{position:fixed;top:0;left:0;right:0;z-index:60;padding:14px 0;transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
+header.stuck{background:rgba(8,9,15,.74);backdrop-filter:blur(16px);border-bottom-color:var(--line-d)}
+.hd{display:flex;align-items:center;gap:30px;color:#fff}
+.logo{display:flex;align-items:center;gap:9px;font-size:19px;font-weight:600;letter-spacing:-.02em;flex:none}
+.logo b{color:var(--blue-l);font-weight:600}
+.logo .brand{height:26px;width:auto;max-width:190px;object-fit:contain}
+.ft .about .logo .brand{height:30px;max-width:220px}
+nav.main{display:flex;gap:24px;font-size:14px;color:rgba(255,255,255,.6)}
+nav.main a{position:relative;padding:2px 0;white-space:nowrap}
+nav.main a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;background:#fff;transition:right .25s}
+nav.main a:hover,nav.main a.on{color:#fff}
+nav.main a:hover::after,nav.main a.on::after{right:0}
+.hd .sp{flex:1}
+.hd .sign{font-size:14px;color:rgba(255,255,255,.72);white-space:nowrap}
+.hd .sign:hover{color:#fff}
+.hd .btn .short{display:none}
+
+/* ---------- hero ---------- */
+.hero{position:relative;background:var(--ink);color:#fff;min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:104px 0 128px;overflow:hidden}
+.hero>.wrap{width:100%}
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:88px 88px;mask-image:radial-gradient(120% 90% at 70% 10%,#000 20%,transparent 75%)}
+.hero .glow{position:absolute;width:900px;height:900px;right:-180px;top:-380px;border-radius:50%;background:radial-gradient(circle,rgba(36,71,230,.42),rgba(36,71,230,0) 62%);filter:blur(20px)}
+.hero .glow2{position:absolute;width:620px;height:620px;left:-220px;bottom:-260px;border-radius:50%;background:radial-gradient(circle,rgba(199,154,62,.18),rgba(199,154,62,0) 65%)}
+.hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:40px;align-items:end;flex:1}
+.hero h1{font-size:clamp(44px,6.8vw,94px);font-weight:600;max-width:14ch;margin:18px 0 0}
+.hero h1 em{font-style:normal;color:var(--blue-l)}
+.hero h1 .thin{font-weight:300;color:rgba(255,255,255,.55)}
+.hero p.sub{margin:22px 0 30px;font-size:17px;line-height:1.55;color:rgba(255,255,255,.62);max-width:52ch}
+.hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+
+.float{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(16px);border-radius:14px;padding:12px;margin-bottom:6px}
+.float .th{border-radius:9px;overflow:hidden;aspect-ratio:16/9;background:#111}
+.float .fl{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;padding:13px 5px 3px}
+.float .tag{font-size:10.5px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--blue-l)}
+.float h4{font-size:17px;margin-top:3px}
+.float small{display:block;font-size:12.5px;color:rgba(255,255,255,.5);margin-top:3px}
+.float .go{width:34px;height:34px;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center;flex:none;transition:transform .25s}
+.float:hover .go{transform:rotate(45deg)}
+
+.hero-foot{position:relative;z-index:2;display:flex;gap:56px;flex-wrap:wrap;padding:28px 0 0;margin-top:38px}
+.hero-foot div b{display:block;font-size:30px;font-weight:500;letter-spacing:-.04em}
+.hero-foot div span{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--mut-d)}
+.ghost{position:absolute;left:0;right:0;bottom:-.36em;z-index:1;font-size:clamp(96px,20.2vw,290px);font-weight:600;letter-spacing:-.05em;line-height:.8;text-align:center;color:transparent;background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.03));-webkit-background-clip:text;background-clip:text;user-select:none;pointer-events:none;white-space:nowrap}
+
+/* ---------- page head (subpages) ---------- */
+.phead{position:relative;background:var(--ink);color:#fff;overflow:hidden;padding:132px 0 54px}
+.phead .glow{position:absolute;width:760px;height:760px;right:-160px;top:-420px;border-radius:50%;background:radial-gradient(circle,rgba(36,71,230,.38),rgba(36,71,230,0) 62%)}
+.phead>.wrap{position:relative;z-index:2}
+.phead h1{font-size:clamp(34px,5.2vw,66px);margin-top:14px}
+.phead p.sub{margin-top:18px;font-size:16.5px;color:rgba(255,255,255,.6);max-width:60ch}
+.phead .crumb{font-size:13px;color:rgba(255,255,255,.5);margin-bottom:16px}
+.phead .crumb a:hover{color:#fff}
+.phead .row{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
+
+/* ---------- ticker ---------- */
+.ticker{background:#05060B;border-top:1px solid var(--line-d);border-bottom:1px solid var(--line-d);overflow:hidden;white-space:nowrap;color:rgba(255,255,255,.72);font-size:12.5px}
+.ticker .in{display:inline-block;padding:12px 0;animation:tick 60s linear infinite}
+.ticker .it{display:inline-block;margin-right:40px;transition:color .2s}
+.ticker .it:hover{color:#fff}
+.ticker .it:hover .tag{color:#fff}
+.ticker:hover .in{animation-play-state:paused}
+.ticker .it b{color:#fff;font-weight:500}
+.ticker .tag{color:var(--blue-l);font-weight:600;letter-spacing:.08em;font-size:11px}
+.ticker .up{color:#5CD99A}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ---------- statement ---------- */
+.stmt{background:var(--paper);padding:100px 0 0}
+.stmt .top{margin-bottom:36px}
+.stmt h2{font-size:clamp(28px,4.1vw,58px);font-weight:500;letter-spacing:-.035em;line-height:1.12;max-width:30ch;text-wrap:pretty}
+.stmt h2 .dim{color:#A6ABBC;font-weight:400}
+
+/* ---------- tiles ---------- */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:72px 0 110px;align-items:start}
+.tile{border-radius:18px;padding:22px;min-height:286px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s}
+.tile:hover{transform:translateY(-5px);box-shadow:0 22px 44px rgba(10,12,20,.14)}
+.tile.s1{margin-top:0}.tile.s2{margin-top:38px}.tile.s3{margin-top:74px}.tile.s4{margin-top:18px}
+.tile-d{background:var(--ink);color:#fff}
+.tile-l{background:#fff;color:var(--tx);border:1px solid var(--line)}
+.tile-a{background:linear-gradient(160deg,var(--blue),#16309E);color:#fff}
+.pill{align-self:flex-start;font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:6px 13px;border-radius:99px;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.82)}
+.tile-l .pill{border-color:var(--line);color:var(--mut)}
+.tile h3{font-size:21px;margin-bottom:9px;line-height:1.1}
+.tile p{font-size:13.5px;line-height:1.5;color:rgba(255,255,255,.55)}
+.tile-l p{color:var(--mut)}
+.tile-a p{color:rgba(255,255,255,.78)}
+.tile .dot{position:absolute;top:24px;right:24px;width:8px;height:8px;border-radius:50%;background:var(--blue-l)}
+.tile-l .dot{background:var(--blue)}
+.tile-a .dot{background:#fff}
+.tile .streak{position:absolute;inset:auto -20% -30% -20%;height:180px;background:radial-gradient(60% 100% at 50% 100%,rgba(123,147,255,.22),transparent 70%)}
+
+/* ---------- sections ---------- */
+section.sec{padding:96px 0}
+section.sec.tight{padding:72px 0}
+.dk{background:var(--ink);color:#fff}
+.dk .sec-hd h2,.dk .sec-hd h3,.dk .step h3,.dk .offer h3{color:#fff}
+.sec-hd{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:40px;flex-wrap:wrap}
+.sec-hd h2{font-size:clamp(30px,3.4vw,46px);margin-top:14px}
+.sec-hd p.sd{color:var(--mut);max-width:50ch;margin-top:14px;font-size:15px}
+.dk .sec-hd p.sd{color:rgba(255,255,255,.6)}
+
+/* ---------- deal cards ---------- */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:20px}
+.card{border-radius:18px;overflow:hidden;display:flex;flex-direction:column;position:relative;background:#fff;color:var(--tx);border:1px solid var(--line);transition:transform .25s,box-shadow .25s}
+.card:hover{transform:translateY(-5px);box-shadow:0 22px 44px rgba(10,12,20,.13)}
+.card.dark{background:var(--ink2);border-color:#1E2440;color:#fff}
+.cov{position:relative;margin:10px 10px 0;border-radius:12px;overflow:hidden;aspect-ratio:16/10;background:#0d0f18}
+.cov svg,.cov img{width:100%;height:100%;object-fit:cover}
+.dmedia img,.thumbs img,.float .th img,.lrow .th img{width:100%;height:100%;object-fit:cover}
+.badges{position:absolute;top:11px;left:11px;display:flex;gap:7px;flex-wrap:wrap}
+.bdg{font-size:10.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:6px 11px;border-radius:99px;backdrop-filter:blur(8px)}
+.bdg-sale{background:var(--blue);color:#fff}
+.bdg-raise{background:rgba(12,14,24,.72);color:#EBCB84;border:1px solid rgba(199,154,62,.5)}
+.bdg-chip{background:rgba(255,255,255,.88);color:var(--ink)}
+.vid{position:absolute;right:11px;bottom:11px;display:flex;align-items:center;gap:7px;background:rgba(7,9,16,.72);backdrop-filter:blur(8px);color:#fff;font-size:11px;font-weight:500;letter-spacing:.04em;padding:6px 11px;border-radius:99px}
+.vid i{width:0;height:0;border-left:7px solid #fff;border-top:4.5px solid transparent;border-bottom:4.5px solid transparent}
+.cbody{padding:18px 20px 20px;display:flex;flex-direction:column;gap:9px;flex:1}
+.cbody .ind{font-size:11.5px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--mut);display:flex;justify-content:space-between;gap:10px}
+.card.dark .cbody .ind{color:var(--mut-d)}
+.cbody .vf{color:var(--ok);letter-spacing:.02em;text-transform:none;display:flex;align-items:center;gap:5px;font-weight:500}
+.card.dark .cbody .vf{color:#5CD99A}
+.cbody h3{font-size:23px}
+.cbody p.tg{font-size:14px;color:var(--mut);flex:1;line-height:1.5}
+.card.dark .cbody p.tg{color:rgba(255,255,255,.55)}
+.cmet{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+.cmet span{font-size:12px;color:var(--mut);border:1px solid var(--line);border-radius:99px;padding:5px 11px}
+.card.dark .cmet span{color:var(--mut-d);border-color:#242A44}
+.cmet b{color:var(--tx);font-weight:500}
+.card.dark .cmet b{color:#fff}
+.cnum{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:14px;margin-top:6px;gap:10px}
+.card.dark .cnum{border-color:#20263E}
+.cnum b{font-size:24px;font-weight:600;letter-spacing:-.03em;display:block}
+.cnum span{font-size:12px;color:var(--mut)}
+.card.dark .cnum span{color:var(--mut-d)}
+.cnum .go{width:36px;height:36px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;flex:none;transition:transform .25s}
+.card.dark .cnum .go{background:#fff;color:var(--ink)}
+.card:hover .cnum .go{transform:rotate(45deg)}
+.go svg{width:12px;height:12px}
+.fnote{font-size:11px;color:var(--mut)}
+.card.dark .fnote{color:var(--mut-d)}
+
+/* ---------- filters ---------- */
+.filters{background:#fff;border:1px solid var(--line);border-radius:18px;margin-bottom:24px;overflow:hidden}
+.frow{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:14px 16px}
+.frow+.frow{border-top:1px solid var(--line);background:#FAFAFC}
+.flabel{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-right:6px;flex:none}
+.ftabs{display:flex;gap:4px;background:var(--paper);border-radius:99px;padding:4px}
+.ftabs button{padding:8px 18px;font-size:13.5px;font-weight:500;color:var(--mut);border-radius:99px;transition:background .2s,color .2s}
+.ftabs button.on{background:var(--ink);color:#fff}
+.ftabs button:not(.on):hover{color:var(--tx)}
+.chip{border:1px solid var(--line);background:#fff;border-radius:99px;padding:8px 15px;font-size:13.5px;color:var(--tx);transition:border-color .2s,background .2s,color .2s}
+.chip:hover{border-color:var(--tx)}
+.chip.on{background:var(--blue-t);border-color:var(--blue);color:var(--blue-d)}
+.filters .sp{flex:1}
+.fright{display:flex;gap:10px;align-items:center}
+.filters input[type=search],.filters select{border:1px solid var(--line);border-radius:99px;padding:10px 16px;font-size:13.5px;font-family:var(--f);background:var(--paper);color:var(--tx)}
+.filters input[type=search]{min-width:210px}
+.filters input[type=search]:focus,.filters select:focus{background:#fff;border-color:var(--blue);outline:none}
+.rescount{font-size:13.5px;color:var(--mut);margin:0 0 18px}
+
+/* ---------- deal page ---------- */
+.deal{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:28px;padding:34px 0 96px;align-items:start}
+.dmedia{position:relative;border-radius:18px;overflow:hidden;background:#0d0f18;aspect-ratio:16/10}
+.dmedia svg{width:100%;height:100%}
+.dmedia .play{position:absolute;inset:0;display:grid;place-items:center;background:rgba(7,9,16,.22)}
+.dmedia .play button{width:78px;height:78px;border-radius:50%;background:rgba(255,255,255,.94);display:grid;place-items:center;transition:transform .25s}
+.dmedia .play button:hover{transform:scale(1.06)}
+.dmedia .play i{width:0;height:0;border-left:20px solid var(--ink);border-top:12px solid transparent;border-bottom:12px solid transparent;margin-left:5px}
+.dmedia .lbl{position:absolute;left:14px;bottom:14px;background:rgba(7,9,16,.75);backdrop-filter:blur(8px);color:#fff;font-size:11.5px;font-weight:500;letter-spacing:.06em;padding:7px 13px;border-radius:99px}
+.thumbs{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:10px}
+.thumbs .tb{aspect-ratio:16/10;border-radius:10px;overflow:hidden;opacity:.55;transition:opacity .2s,box-shadow .2s;cursor:pointer;padding:0;background:var(--paper);position:relative}
+.thumbs .tb:hover{opacity:.85}
+.thumbs .tb.on{opacity:1;box-shadow:0 0 0 2px var(--ink)}
+.thumbs .tbv{display:grid;place-items:center;gap:4px;background:var(--ink);color:#fff;opacity:1;font-size:11px;letter-spacing:.06em}
+.thumbs .tbv i{width:0;height:0;border-left:11px solid #fff;border-top:7px solid transparent;border-bottom:7px solid transparent}
+.gnav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.92);color:var(--ink);font-size:26px;line-height:1;display:grid;place-items:center;z-index:3;transition:transform .2s,background .2s;padding-bottom:4px}
+.gnav:hover{background:#fff;transform:translateY(-50%) scale(1.06)}
+.gnav.prev{left:14px}
+.gnav.next{right:14px}
+.gcount{position:absolute;right:14px;top:14px;z-index:3;background:rgba(7,9,16,.7);backdrop-filter:blur(8px);color:#fff;font-size:12px;padding:6px 12px;border-radius:99px}
+.ltile{position:absolute;left:14px;bottom:14px;z-index:3;width:56px;height:56px;border-radius:14px;background:#fff;box-shadow:0 6px 20px rgba(10,12,20,.18);display:grid;place-items:center;overflow:hidden;padding:7px}
+.ltile img{width:100%;height:100%;object-fit:contain}
+.ltile.empty{font-size:17px;font-weight:600;letter-spacing:-.02em;color:var(--mut);padding:0}
+.ltile.lg{position:static;width:72px;height:72px;border-radius:18px;padding:9px;flex:none}
+.ltile.sm{position:static;width:38px;height:38px;border-radius:10px;padding:5px;font-size:13px;flex:none}
+.dsec{background:#fff;border:1px solid var(--line);border-radius:18px;padding:28px 30px;margin-top:18px}
+.dsec h3{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin-bottom:18px;font-weight:500}
+.dsec p{margin-bottom:13px;max-width:72ch;color:#2A2E3D}
+.dsec p:last-child{margin-bottom:0}
+.dsec ul{list-style:none;display:grid;gap:12px}
+.dsec ul li{padding-left:22px;position:relative;font-size:15px}
+.dsec ul li::before{content:"";position:absolute;left:0;top:10px;width:9px;height:2px;border-radius:2px;background:var(--blue)}
+.ftable{width:100%;border-collapse:collapse;font-size:14.5px}
+.ftable td{padding:12px 0;border-bottom:1px solid var(--line)}
+.ftable tr:last-child td{border-bottom:0}
+.ftable td:last-child{text-align:right;font-weight:500;font-variant-numeric:tabular-nums}
+.rail{position:sticky;top:88px;display:flex;flex-direction:column;gap:14px}
+.fact{background:var(--ink);color:#fff;border-radius:18px;padding:26px;position:relative;overflow:hidden}
+.fact .glowf{position:absolute;width:420px;height:420px;right:-190px;top:-230px;border-radius:50%;background:radial-gradient(circle,rgba(36,71,230,.5),transparent 62%)}
+.fact>*{position:relative;z-index:2}
+.fact .fl{font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--mut-d)}
+.fact .fv{font-size:42px;font-weight:600;letter-spacing:-.04em;margin:4px 0 6px}
+.fact .fn{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:20px}
+.fact .rows{border-top:1px solid rgba(255,255,255,.1);margin-bottom:20px}
+.fact .rows div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;font-size:13.5px;border-bottom:1px solid rgba(255,255,255,.07)}
+.fact .rows div:last-child{border-bottom:0}
+.fact .rows span{color:var(--mut-d)}
+.fact .rows b{font-weight:500;text-align:right;font-variant-numeric:tabular-nums}
+.unlocked{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ok);background:var(--okt);border-radius:12px;padding:11px 14px;margin-bottom:14px}
+.advc{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px 24px;font-size:13.5px;color:var(--mut);line-height:1.6}
+.advc b{color:var(--tx);font-weight:500}
+.advc .vf{color:var(--ok);font-weight:500;margin-bottom:8px;display:flex;gap:6px;align-items:center}
+
+/* ---------- steps / offers ---------- */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.step{background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px 24px;transition:transform .25s,box-shadow .25s}
+.step:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(10,12,20,.1)}
+.dk .step{background:var(--ink2);border-color:#1D2238}
+.step b.n{font-size:11.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--blue)}
+.dk .step b.n{color:var(--blue-l)}
+.step h3{font-size:20px;margin:12px 0 9px}
+.step p{font-size:14px;color:var(--mut);line-height:1.5}
+.dk .step p{color:rgba(255,255,255,.55)}
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.offer{border-radius:20px;padding:32px}
+.offer.d{background:var(--ink2);border:1px solid #1D2238;color:#fff}
+.offer.l{background:#fff;border:1px solid var(--line)}
+.offer h3{font-size:26px;margin:10px 0 12px}
+.offer p.od{font-size:14.5px;margin-bottom:18px;color:var(--mut)}
+.offer.d p.od{color:rgba(255,255,255,.6)}
+.offer .pr{font-size:42px;font-weight:600;letter-spacing:-.04em;margin-bottom:6px}
+.offer .pr small{font-size:13px;color:var(--mut);font-weight:400;letter-spacing:0}
+.offer.d .pr small{color:var(--mut-d)}
+.offer ul{list-style:none;margin:16px 0 24px;display:grid;gap:10px;font-size:14.5px}
+.offer.d ul{color:rgba(255,255,255,.78)}
+.offer.l ul{color:#2A2E3D}
+.offer ul li{padding-left:22px;position:relative}
+.offer ul li::before{content:"";position:absolute;left:0;top:7px;width:8px;height:8px;border-radius:50%;border:2px solid var(--blue)}
+.offer.d ul li::before{border-color:var(--blue-l)}
+
+/* ---------- wizard ---------- */
+.wiz{max-width:820px;margin:0 auto;padding:44px 32px 96px}
+.wsteps{display:flex;gap:6px;margin:24px 0 28px}
+.wsteps i{flex:1;height:4px;background:var(--line);border-radius:99px;transition:background .3s}
+.wsteps i.on{background:var(--blue)}
+.wcard{background:#fff;border:1px solid var(--line);border-radius:20px;padding:32px 34px}
+.wtitle{font-size:clamp(28px,3.4vw,38px);margin-top:12px}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.fgrid .full{grid-column:1/-1}
+label.f{display:block;font-size:11.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin-bottom:8px}
+input.f,select.f,textarea.f{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px 15px;font-size:15px;font-family:var(--f);background:#FBFBFD;color:var(--tx);transition:border-color .2s,background .2s}
+input.f:focus,select.f:focus,textarea.f:focus{background:#fff;border-color:var(--blue);outline:none}
+textarea.f{resize:vertical}
+.pick{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pick button{background:#fff;border:1px solid var(--line);border-radius:18px;padding:28px 24px;text-align:left;transition:border-color .2s,transform .2s}
+.pick button:hover{border-color:var(--tx);transform:translateY(-3px)}
+.pick button.on{border-color:var(--blue);box-shadow:inset 0 0 0 1px var(--blue)}
+.pick h3{font-size:21px;margin-bottom:8px}
+.pick p{font-size:14px;color:var(--mut)}
+.drop{border:1.5px dashed var(--line);border-radius:16px;padding:34px;text-align:center;color:var(--mut);font-size:14px;background:#FBFBFD;line-height:1.6}
+.drop b{color:var(--tx);font-weight:500}
+.drop.req{border-color:rgba(199,154,62,.6);background:var(--bronze-t)}
+.req{background:var(--bronze-t);color:#8A6A20;border-radius:99px;padding:3px 9px;font-size:10px;letter-spacing:.08em;margin-left:8px}
+.logobox{display:flex;gap:18px;align-items:flex-start;border:1px solid var(--line);border-radius:16px;padding:16px 18px;background:#FBFBFD}
+.lprev{width:88px;height:88px;border-radius:16px;border:1.5px dashed var(--line);background:#fff;display:grid;place-items:center;flex:none;font-size:10.5px;letter-spacing:.12em;color:var(--mut);overflow:hidden;padding:8px}
+.lprev.has{border-style:solid}
+.lprev img{width:100%;height:100%;object-fit:contain}
+.lrule{font-size:12.5px;color:var(--mut);line-height:1.6;margin-top:12px;max-width:62ch}
+.uslot{border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:12px;background:#FBFBFD}
+.uhead{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+.uhead b{font-size:15px;font-weight:500;display:block}
+.uhead span{font-size:12.5px;color:var(--mut)}
+.ufiles{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.ufile{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:99px;padding:6px 8px 6px 6px;font-size:13px}
+.ufile i{font-style:normal;font-size:9.5px;font-weight:600;letter-spacing:.06em;background:var(--paper);color:var(--mut);border-radius:99px;padding:4px 8px}
+.ufile .rm{font-size:16px;line-height:1;color:var(--mut);padding:0 2px}
+.ufile .rm:hover{color:#B0342F}
+.uempty{font-size:13px;color:var(--mut)}
+.uacts{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.wnav{display:flex;justify-content:space-between;gap:12px;margin-top:24px}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+.plan{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;text-align:left;position:relative;transition:border-color .2s}
+.plan:hover{border-color:var(--tx)}
+.plan.on{border-color:var(--blue);box-shadow:inset 0 0 0 1px var(--blue)}
+.plan .pl{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--mut);font-weight:500}
+.plan .pp{font-size:30px;font-weight:600;letter-spacing:-.04em;margin:6px 0 4px}
+.plan .save{position:absolute;top:16px;right:16px;background:var(--okt);color:var(--ok);font-size:11px;font-weight:600;padding:5px 11px;border-radius:99px;letter-spacing:.05em}
+.paybox{border:1px solid var(--line);border-radius:16px;padding:20px 22px;background:#FBFBFD}
+.paybox .row{display:flex;justify-content:space-between;font-size:14.5px;padding:7px 0}
+.paybox .row.t{border-top:1px solid var(--line);margin-top:8px;padding-top:14px;font-weight:600;font-size:17px}
+.note{font-size:12.5px;color:var(--mut);margin-top:16px;line-height:1.6}
+.chk{display:flex;gap:10px;font-size:13.5px;color:var(--mut);align-items:flex-start}
+.chk input{margin-top:3px;accent-color:var(--blue)}
+.done{max-width:640px;margin:0 auto;text-align:center;padding:120px 32px 120px}
+.done .ok{width:78px;height:78px;border-radius:50%;background:var(--okt);color:var(--ok);display:grid;place-items:center;font-size:34px;margin:0 auto 26px}
+.done h1{font-size:clamp(32px,4vw,44px);margin-bottom:14px}
+.done p{color:var(--mut);margin-bottom:30px;line-height:1.6}
+
+/* ---------- account ---------- */
+.acc{padding:40px 0 96px}
+.astats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:0 0 34px}
+.astat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px 24px}
+.astat b{font-size:34px;font-weight:600;letter-spacing:-.04em;display:block}
+.astat span{font-size:12px;color:var(--mut);letter-spacing:.07em;text-transform:uppercase}
+.astat.d{background:var(--ink);color:#fff;border-color:#1B2038}
+.astat.d span{color:var(--mut-d)}
+.blk-h{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:32px 0 14px;font-weight:500}
+.tblwrap{overflow-x:auto;background:#fff;border:1px solid var(--line);border-radius:18px}
+table.lst{width:100%;min-width:660px;border-collapse:collapse;font-size:14.5px}
+table.lst th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);text-align:left;padding:16px 20px;border-bottom:1px solid var(--line);font-weight:500}
+table.lst td{padding:16px 20px;border-bottom:1px solid var(--line);vertical-align:middle}
+table.lst tr:last-child td{border-bottom:0}
+table.lst b{font-weight:500}
+select.stx{border:1px solid var(--line);border-radius:99px;padding:7px 12px;font-size:12.5px;font-family:var(--f);background:#fff;color:var(--tx)}
+.st{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:99px;white-space:nowrap}
+.st-live{background:var(--okt);color:var(--ok)}
+.st-mod{background:var(--bronze-t);color:#8A6A20}
+.st-dr{background:#EDEEF3;color:var(--mut)}
+.lnk{color:var(--blue);font-weight:500}
+.lnk:hover{color:var(--blue-d)}
+
+/* ---------- auth ---------- */
+.auth{position:relative;background:var(--ink);color:#fff;min-height:100svh;display:grid;place-items:center;padding:150px 24px 100px;overflow:hidden;text-align:center}
+.auth .glow{position:absolute;width:800px;height:800px;left:50%;top:-420px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,rgba(36,71,230,.4),rgba(36,71,230,0) 62%)}
+.authbox{position:relative;z-index:2;width:min(440px,100%)}
+.auth h1{font-size:clamp(38px,5vw,58px);margin:16px 0 14px}
+.auth .sub{color:rgba(255,255,255,.6);font-size:15.5px;margin:0 auto;max-width:38ch}
+.authcard{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(12px);border-radius:20px;padding:26px 26px 28px;margin-top:30px;display:grid;gap:16px;text-align:left}
+.authcard label.f{color:var(--mut-d)}
+.authcard input.f{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.16);color:#fff}
+.authcard input.f::placeholder{color:rgba(255,255,255,.35)}
+.authcard input.f:focus{background:rgba(255,255,255,.09);border-color:var(--blue-l)}
+.auth .note{color:var(--mut-d);margin-top:18px}
+
+/* ---------- console ---------- */
+.console{display:grid;grid-template-columns:238px minmax(0,1fr);gap:24px;padding:32px 0 96px;align-items:start}
+.side{position:sticky;top:88px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:10px}
+.side a{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;border-radius:12px;font-size:14.5px;color:var(--mut);transition:background .2s,color .2s}
+.side a:hover{background:var(--paper);color:var(--tx)}
+.side a.on{background:var(--ink);color:#fff}
+.side a .cnt{font-size:11.5px;font-variant-numeric:tabular-nums;background:var(--blue);color:#fff;border-radius:99px;padding:2px 8px}
+.side a.on .cnt{background:rgba(255,255,255,.18)}
+.side .sh{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);padding:14px 14px 8px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px 26px;margin-bottom:18px}
+.panel-d{background:var(--ink);color:#fff;border-color:#1B2038}
+.ph{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.ph h3{font-size:19px}
+.ph .sub{font-size:13px;color:var(--mut);margin-top:4px}
+.panel-d .ph .sub{color:var(--mut-d)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 22px}
+.kpi.d{background:var(--ink);color:#fff;border-color:#1B2038}
+.kpi b{font-size:32px;font-weight:600;letter-spacing:-.04em;display:block}
+.kpi span{display:block;font-size:11.5px;color:var(--mut);letter-spacing:.07em;text-transform:uppercase}
+.kpi.d span{color:var(--mut-d)}
+.kpi .delta{font-size:12px;margin-top:8px;display:inline-flex;gap:5px;align-items:center;color:var(--ok)}
+.kpi .delta.dn{color:#B0342F}
+.todo{display:grid;gap:10px}
+.todo a{display:flex;gap:14px;align-items:center;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#FBFBFD;transition:border-color .2s,transform .2s}
+.todo a:hover{border-color:var(--tx);transform:translateX(3px)}
+.todo .ti{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none;font-size:15px}
+.todo .ti.b{background:var(--blue-t);color:var(--blue-d)}
+.todo .ti.g{background:var(--bronze-t);color:#8A6A20}
+.todo .ti.n{background:#EDEEF3;color:var(--mut)}
+.todo b{display:block;font-size:14.5px;font-weight:500}
+.todo span{font-size:12.5px;color:var(--mut)}
+.todo .go{margin-left:auto;color:var(--mut)}
+.funnel{display:grid;gap:10px}
+.fstep{display:grid;grid-template-columns:150px minmax(0,1fr) 74px;gap:14px;align-items:center;font-size:13.5px}
+.fstep .bar{height:30px;border-radius:8px;background:var(--paper);overflow:hidden}
+.fstep .bar i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,var(--blue),#5B7BFF)}
+.fstep .bar i.dim{background:linear-gradient(90deg,#20243A,#3A4166)}
+.fstep .v{text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
+.fstep .lb{color:var(--mut)}
+.chart{width:100%;height:190px}
+.chart .gl{stroke:var(--line)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--mut);margin-top:14px}
+.legend i{width:9px;height:9px;border-radius:3px;display:inline-block;margin-right:6px}
+.srcs{display:grid;gap:12px}
+.src{display:grid;grid-template-columns:minmax(0,1fr) 54px;gap:12px;align-items:center;font-size:13.5px}
+.src .tr{height:8px;border-radius:99px;background:var(--paper);margin-top:7px;overflow:hidden}
+.src .tr i{display:block;height:100%;border-radius:99px;background:var(--blue)}
+.src .pc{text-align:right;color:var(--mut);font-variant-numeric:tabular-nums}
+.tl{display:grid;gap:0}
+.tl div{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.tl div:last-child{border-bottom:0}
+.tl time{color:var(--mut);flex:none;width:96px;font-variant-numeric:tabular-nums}
+.tl b{font-weight:500}
+.stfilter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.stfilter button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:8px 14px;font-size:13px;color:var(--mut);transition:.2s}
+.stfilter button:hover{border-color:var(--tx);color:var(--tx)}
+.stfilter button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.st-new{background:var(--blue-t);color:var(--blue-d)}
+.st-rep{background:#EDEEF3;color:var(--mut)}
+.st-nda{background:var(--bronze-t);color:#8A6A20}
+.st-view{background:#E6F0FF;color:#1A34AE}
+.st-loi{background:var(--okt);color:var(--ok)}
+.st-lost{background:#F6E7E6;color:#8E332E}
+.qs{display:inline-flex;gap:3px;vertical-align:middle}
+.qs i{width:6px;height:12px;border-radius:2px;background:var(--line)}
+.qs i.on{background:var(--ok)}
+tr.erow{cursor:pointer}
+tr.erow:hover td{background:#FAFAFC}
+.lrow{display:grid;grid-template-columns:132px minmax(0,1fr) auto;gap:18px;align-items:center;padding:18px 0;border-bottom:1px solid var(--line)}
+.lrow:last-child{border-bottom:0}
+.lrow .th{border-radius:12px;overflow:hidden;aspect-ratio:16/10;background:var(--paper)}
+.lrow h4{font-size:18px;margin-bottom:6px}
+.lrow .meta{font-size:13px;color:var(--mut);display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
+.lrow .acts{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.bar-mini{height:6px;border-radius:99px;background:var(--paper);overflow:hidden;margin-top:10px;max-width:280px}
+.bar-mini i{display:block;height:100%;background:var(--blue)}
+.docrow{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line);font-size:14px}
+.docrow:last-child{border-bottom:0}
+.docrow .di{width:38px;height:38px;border-radius:10px;background:var(--paper);display:grid;place-items:center;font-size:11px;font-weight:600;color:var(--mut);flex:none}
+.docrow .dm{font-size:12.5px;color:var(--mut)}
+.docrow .sp{flex:1}
+.gate{font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:99px;background:var(--bronze-t);color:#8A6A20;white-space:nowrap}
+.gate.open{background:var(--okt);color:var(--ok)}
+.sw{position:relative;width:42px;height:24px;border-radius:99px;background:var(--line);flex:none;transition:background .2s;cursor:pointer}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s}
+.sw.on{background:var(--blue)}
+.sw.on::after{transform:translateX(18px)}
+.swrow{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+.swrow:last-child{border-bottom:0}
+.swrow b{font-weight:500;font-size:14.5px;display:block}
+.swrow span{font-size:12.5px;color:var(--mut)}
+.swrow .sp{flex:1}
+.drawer{position:fixed;inset:0;z-index:110;display:flex;justify-content:flex-end;background:rgba(6,7,13,.5);backdrop-filter:blur(4px);animation:fade .2s ease}
+.dr{background:#fff;width:min(520px,100%);height:100%;overflow:auto;padding:28px 30px;animation:slide .25s ease}
+@keyframes slide{from{transform:translateX(40px);opacity:.6}to{transform:none;opacity:1}}
+.dr h3{font-size:24px;margin:6px 0 4px}
+.dr .x{float:right;font-size:24px;color:var(--mut);padding:0 4px}
+.dr .kv{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font-size:14px}
+.dr .kv:last-of-type{border-bottom:0}
+.dr .kv span{color:var(--mut)}
+.dr .msg{background:#FBFBFD;border:1px solid var(--line);border-radius:14px;padding:16px;font-size:14px;line-height:1.6;margin:16px 0}
+.dr .acts{display:grid;gap:10px;margin-top:16px}
+.dsub{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);font-weight:500;margin:24px 0 12px}
+.thread{display:grid;gap:14px;margin-bottom:18px}
+.mb{display:grid;gap:5px;max-width:88%}
+.mb.you{justify-self:end;text-align:right}
+.mb .bub{background:#F4F5F9;border-radius:14px 14px 14px 4px;padding:13px 15px;font-size:14px;line-height:1.55;text-align:left}
+.mb.you .bub{background:var(--blue);color:#fff;border-radius:14px 14px 4px 14px}
+.mb time{font-size:11.5px;color:var(--mut)}
+.msg-s{display:flex;justify-content:space-between;gap:12px;font-size:12.5px;color:var(--mut);background:#FBFBFD;border:1px dashed var(--line);border-radius:12px;padding:9px 13px}
+.msg-s time{white-space:nowrap}
+.tpls,.slots{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.slots{margin:12px 0 0}
+.tpl{border:1px solid var(--line);background:#fff;border-radius:99px;padding:7px 13px;font-size:12.5px;color:var(--mut);transition:.2s}
+.tpl:hover{border-color:var(--tx);color:var(--tx)}
+@media(max-width:980px){
+  .console{grid-template-columns:1fr}
+  .side{position:static;display:flex;gap:6px;overflow-x:auto;padding:8px}
+  .side .sh{display:none}
+  .side a{white-space:nowrap}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .lrow{grid-template-columns:96px minmax(0,1fr)}
+  .lrow .acts{grid-column:1/-1;justify-content:flex-start}
+  .fstep{grid-template-columns:110px minmax(0,1fr) 60px;font-size:12.5px}
+}
+
+/* ---------- modal ---------- */
+.mroot{position:fixed;inset:0;background:rgba(6,7,13,.6);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:100;padding:24px;animation:fade .2s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.modal{background:#fff;border-radius:22px;max-width:520px;width:100%;padding:32px 34px;max-height:92vh;overflow:auto}
+.modal h2{font-size:28px;margin-bottom:8px}
+.modal p.ms{color:var(--mut);font-size:14px;margin-bottom:22px}
+.modal form{display:grid;gap:15px}
+.modal .x{float:right;font-size:24px;color:var(--mut);line-height:1;padding:0 4px}
+.modal .x:hover{color:var(--tx)}
+
+/* ---------- footer ---------- */
+footer{background:var(--ink);color:var(--mut-d);font-size:14px;overflow:hidden;position:relative}
+.ft{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:30px;padding:70px 0 44px}
+.ft h4{color:#fff;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px;font-weight:500}
+.ft a{display:block;padding:5px 0}
+.ft .about .logo{display:inline-flex;padding:0;color:#fff}
+.ft a:hover{color:#fff}
+.ft .about p{max-width:38ch;margin-top:14px;line-height:1.6}
+.ft .about .logo{margin-bottom:4px}
+.legal{font-size:12px;color:#5B6280;line-height:1.65;max-width:96ch;padding-bottom:26px}
+.fbot{border-top:1px solid var(--line-d);padding:20px 0;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:12.5px}
+.fmark{font-size:clamp(80px,17.6vw,258px);font-weight:600;letter-spacing:-.05em;line-height:.72;text-align:center;color:transparent;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.02));-webkit-background-clip:text;background-clip:text;user-select:none;pointer-events:none;white-space:nowrap;margin-bottom:-.18em;padding-top:10px}
+
+/* ---------- responsive ---------- */
+@media(max-width:1080px){
+  .tiles{grid-template-columns:repeat(2,1fr)}
+  .tile.s1,.tile.s2,.tile.s3,.tile.s4{margin-top:0}
+  .hero-inner{grid-template-columns:1fr}
+  .float{max-width:340px}
+  .deal{grid-template-columns:1fr}
+  .rail{position:static}
+}
+@media(max-width:900px){
+  nav.main{display:none}
+  .twocol{grid-template-columns:1fr}
+  .ft{grid-template-columns:1fr 1fr}
+}
+@media(max-width:820px){
+  .wrap{padding:0 20px}
+  .wiz{padding:32px 20px 72px}
+  .hero{padding-top:96px}
+  .hero-foot{gap:26px 36px;margin-top:32px;padding-top:24px}
+  .hero-foot div b{font-size:25px}
+  .stmt{padding-top:70px}
+  .tiles{padding:48px 0 72px}
+  section.sec{padding:70px 0}
+  .phead{padding:112px 0 44px}
+  .dsec{padding:24px 22px}
+  .wcard{padding:26px 22px}
+}
+@media(max-width:600px){
+  .hd{gap:12px}
+  .hd .sign{display:none}
+  .hd .btn .long{display:none}
+  .hd .btn .short{display:inline}
+  .tiles{grid-template-columns:1fr}
+  .fgrid,.pick,.plans{grid-template-columns:1fr}
+  .thumbs{grid-template-columns:repeat(3,1fr)}
+  .cards{grid-template-columns:1fr}
+  .astat b{font-size:28px}
+}
+@media (prefers-reduced-motion:reduce){
+  .ticker .in{animation:none}
+  .tile:hover,.card:hover,.step:hover{transform:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<header id="hdr"></header>
+<div id="app"></div>
+<footer id="ftr"></footer>
+<div id="mroot"></div>
+
+<script>
+/* =============== DATA =============== */
+const LISTINGS = [
+{
+  id:'petit-paradis', type:'sale', name:'Petit Paradis',
+  tag:'Premium kids play, party and café venue in City Walk. Breakeven from day one, manager-run, four revenue streams from a single footfall.',
+  industry:'Kids & Family', loc:'City Walk, Dubai, UAE', vid:'1:12',
+  ask:'AED 3.5M', askLabel:'Asking price', askNote:'100% share sale, debt-free / cash-free', chip:'100% share sale',
+  met:[['Revenue / yr','AED 2.4M'],['Net profit / yr','≈ AED 1.2M'],['Multiple','≈ 2.7×']],
+  facts:[['Deal structure','100% share sale'],['Revenue, last 12 mo','AED 2.4M run-rate'],['EBITDA','≈ AED 1.2M / yr'],['Established','2025'],['Team','6 people, all stay'],['Owner involvement','Manager-run'],['Premises','The Hub, City Walk, leased'],['Handover','Structured, 8–10 weeks']],
+  about:[
+    'Petit Paradis is a premium indoor children’s play and party venue in The Hub, City Walk, one of Dubai’s most affluent family districts. A supervised soft-play town, bespoke birthday celebrations, a parent-friendly café and a curated retail corner operate under one roof and monetize a single footfall four times over.',
+    'The venue opened in August 2025, has been breakeven from day one and is ahead of its business plan. Operations run on Odoo ERP with integrated POS. The business is manager-run, not founder-dependent: a six-person team stays on after the sale, and the vendor provides a structured handover.'
+  ],
+  model:[
+    'Revenue mix: play admissions 59%, birthdays and events 21%, F&B 15%, retail 5%',
+    'Play entry AED 100, monthly membership AED 699, average birthday AED 7K',
+    'Fixed cost base is essentially rent plus a six-person team, so incremental revenue converts to EBITDA at a high rate',
+    'Cost structure at run-rate: rent 26%, staff 11%, COGS 6%, SG&A 6%, EBITDA 51%'
+  ],
+  fin:[['Revenue, first 10 months','AED 1,030,000'],['Annualized run-rate (May)','AED 2,400,000'],['Target EBITDA margin','50–55%'],['Projected EBITDA 2026E','≈ AED 1,200,000'],['Projected EBITDA 2027E','≈ AED 1,300,000'],['Asking price','AED 3,500,000']],
+  traction:[
+    '40+ birthday celebrations hosted since opening',
+    'Ramp to AED 130K/month within three months of opening',
+    'POS-verified revenue from day one, full data room ready',
+    'Catchment growing from 1,500 homes today to 5,500 by 2028',
+    'UAE kids entertainment market exceeding AED 630M by 2027'
+  ],
+  terms:[['Included','Licence, fit-out, assets, brand, team, customer and membership data'],['Rent deposit','AED 100K transfers to buyer'],['Handover','Structured, with optional advisory tail'],['Governing law','UAE'],['Timeline','LOI to close in 8–10 weeks']]
+},
+{
+  id:'like-bricks', type:'raise', name:'Like Bricks',
+  tag:'The UAE’s fastest-growing network of bricks-themed kids play centres. Two new branches opening in Ibn Battuta Mall and Yas Mall.',
+  industry:'Kids & Family', loc:'Dubai & Abu Dhabi, UAE', vid:'0:58',
+  ask:'AED 7.1M', askLabel:'Raising across 2 branches', askNote:'Equity stakes in specific branches, from AED 500K', chip:'Equity',
+  met:[['Instrument','Branch equity'],['Min ticket','AED 500K'],['Projected ROI*','44–47% / yr']],
+  facts:[['Instrument','Equity in a specific branch'],['Round size','AED 7.1M across 2 branches'],['Equity offered','3–7% per slot'],['Min ticket','AED 500K'],['Stage','Operating network, 2 new sites'],['Use of funds','Fit-out and launch of 2 branches'],['Projected return*','44–47% / yr, ≈5× exit at Y3'],['Docs available','Deck, financial model, SPA & SHA']],
+  about:[
+    'Like Bricks operates branded indoor play centres built around world-famous construction bricks, placed in the UAE’s highest-footfall family malls in partnership with Dubai Holding, Majid Al Futtaim, Aldar, EMAAR and Al-Futtaim Group. Every location opened to date is profitable, with a 5.0 average Google rating across thousands of reviews.',
+    'The company is raising equity for two new branches: Ibn Battuta Mall, Dubai (726 m², opening July 2026, 21M visitors a year) and Yas Mall, Abu Dhabi (230 m², opening September 2026, 18M visitors a year). Investors buy a percentage stake in a specific branch and receive 80% of net profit until their capital is fully recovered.'
+  ],
+  model:[
+    'Three zones per venue: Brick City & Building, Soft Play with ninja course, Interactive projection games. Ages 1–12',
+    'Four recurring revenue streams: entry tickets, birthday packages, school and nursery trips, building workshops',
+    'Reference economics: Dubai Hills branch nets AED 306K per month, 117.7% annual ROI, payback in 10 months',
+    'Net margins across operating branches run 31–56% of revenue'
+  ],
+  fin:[['Dubai Hills Mall, net profit','AED 306,406 / mo'],['City Centre Al Zahia, net profit','AED 330,980 / mo'],['Dubai Festival City, net profit','AED 109,298 / mo'],['Ibn Battuta projected ROI','44.3% / yr'],['Yas Mall projected ROI','47.3% / yr'],['Implied Year-3 value, Ibn Battuta','AED 68.8M']],
+  traction:[
+    '4 profitable Like Bricks branches plus 2 Bricobilandia sites operating today',
+    '5.0 average Google rating, 8,000+ reviews across the network',
+    '90% of top UAE family malls secured with leading developers',
+    '1 in 4 investors reinvested into a second location',
+    'MENA roadmap 2026–2030: Saudi Arabia, Oman, GCC, franchise launch'
+  ],
+  terms:[['Structure','Equity in a specific branch, investor pool capped at 50%'],['Distribution','80% of net profit to investors until capital recovered, then pro-rata'],['Exit','Option to exit at Year-3 company valuation, ≈ 5× money'],['Process','NDA, term sheet, transfer, SPA & SHA'],['Bonus','Gold Investor Card: unlimited access for investors’ children']]
+},
+{
+  id:'tg-mena', type:'raise', name:'True Gamers MENA',
+  tag:'#1 gaming club ecosystem in MENA and a top-5 global PC-club franchise. Flagships in Dubai Mall, Bluewaters and Yas Mall.',
+  industry:'Gaming & Entertainment', loc:'UAE & Saudi Arabia', vid:'1:34',
+  ask:'$3.59M', askLabel:'Growth round', askNote:'25% equity at $17.97M valuation, 20% discount', chip:'Equity',
+  met:[['Valuation','$17.97M'],['Equity','25%'],['Min ticket','$300–500K']],
+  facts:[['Instrument','Equity'],['Round size','$3.59M'],['Valuation','$17.97M post, 20% discount'],['Equity offered','25%'],['Min ticket','$300–500K'],['Stage','Growth, operating network'],['Use of funds','Pods, IZI SaaS, franchise, WC'],['Docs available','Actuals 2024–25, model, memo']],
+  about:[
+    'True Gamers is the largest gaming club network in MENA and part of a top-5 global PC-club franchise with more than 160 clubs opened worldwide. The company operates flagship venues in Dubai Mall, Bluewaters, Yas Mall and top Riyadh malls, serving 120,000 guests a month with a 60% return rate.',
+    'This is a growth round in an operating business, not a startup: the raise funds scaling of four mutually reinforcing revenue engines across 12 MENA countries, riding Saudi Arabia’s $38B gaming push and the Dubai Gaming 2033 program.'
+  ],
+  model:[
+    'Owned clubs: about $22K revenue per club per month from five streams per square meter, including F&B at up to 45% of revenue',
+    'Franchising: entry fees $5–30K, royalties 2–7%, equipment commissions, franchisee bears the CAPEX',
+    'IZI: proprietary ERP and SaaS platform for cyber clubs, sold externally at about 50% margin',
+    'TG Pods: staff-free 2–4 m² gaming capsules for malls, hotels and airports, about $2K a month each and a 16-month payback'
+  ],
+  fin:[['Network revenue 2026E','$4.2M'],['Network revenue 2035','$13M'],['EBITDA by 2029','$2.8M at 58% margin'],['Mature EBITDA margin','67%'],['Use of funds: growth','$3.22M'],['Target return','4.8× MOIC over 5 years']],
+  traction:[
+    '160+ clubs opened worldwide, top-5 global PC-club franchise',
+    '21 clubs in MENA today, 15 in the UAE, doubling by 2028',
+    '120K guests a month, 60% return rate, 750+ tournaments held',
+    'Roadmap to 2029: 66 franchise clubs, 500 pods, 336 clubs on IZI',
+    '87M gamers in MENA with median age 22, growing 8–13% a year'
+  ],
+  terms:[['Instrument','Equity, 25% for $3.59M'],['Valuation','$17.97M, offered at a 20% discount'],['Dividends','From net profit starting 2028'],['Use of funds','TG Pods $1.2M, IZI $0.5M, franchise $0.3M, working capital and reserve'],['DD package','Monthly actuals 2024–2025, financial model, investment memorandum']]
+},
+{
+  id:'ags-foods', type:'raise', name:'AGS Foods',
+  tag:'Trade finance secured by physical commodity. $178M revenue agro exporter with its own sea terminal, offering 12% p.a. in USD.',
+  industry:'Agro & Trade Finance', loc:'UAE · Türkiye · China · Russia', vid:'1:05',
+  ask:'12% p.a.', askLabel:'Stated rate, USD*', askNote:'Seller’s stated terms: working-capital loans and profit share, tickets $1M–$30M', chip:'Debt · profit share',
+  met:[['Stated rate*','12% p.a. USD'],['Term','30 days – 12 mo'],['Min ticket','$1M']],
+  facts:[['Instrument','USD loan or profit share'],['Stated rate*','12% p.a.'],['Ticket range','$1M – $30M'],['Term','30–90 days or up to 12 mo'],['Stage','Operating, $178M revenue 2025'],['Security','Goods pledge, warehouse receipts, L/C'],['Insurance','100% cargo, incl. force majeure'],['Docs available','Audited financials, KYC pack under NDA']],
+  about:[
+    'AGS Foods is an established exporter of niche agricultural products: grains, pulses, oilseeds and processing by-products. The company buys goods only against already-signed back-to-back contracts with end buyers, accumulates vessel lots in its own warehouses and ships from its own sea terminal in Azov. The buyer receives cargo only after payment.',
+    'Investor capital is deployed into this working-capital rotation and is collateralized by physical goods at every step. Revenue grew from $44M in 2020 to $178M in 2025, with $250M forecast for 2026. The company remained profitable in 2025 while several large peers posted losses.'
+  ],
+  model:[
+    'Back-to-back trading: purchase only against signed contracts with large feed mills and processors',
+    'Full cycle of 45–60 days; capital sits outside physical goods no more than 2 days',
+    'Own infrastructure: sea terminal with 2 berths loading 5,000 t/day, 70,000 m² of warehousing, own vessel',
+    'Settlements in USD via non-sanctioned banks under food carve-outs (OFAC GL 6D, EU 833/2014)'
+  ],
+  fin:[['Revenue 2020','$44M'],['Revenue 2024','$155M'],['Revenue 2025','$178M'],['Forecast 2026','$250M'],['Export volume 2025','545,000 tonnes'],['Paid to investors since 2022','$7,950,000']],
+  traction:[
+    '#1 Russian exporter of wheat bran with 17.9% market share, "Exporter of the Year 2025"',
+    '300+ regular trading partners across 10 years in the market',
+    '9 of 10 investors roll over their loans, 7 of 10 add capital',
+    'Exchange-listed bonds on MOEX, NKR credit rating BB.ru, audited financials',
+    'AI in operations: voice bots screening thousands of farmers, AI logistics routing'
+  ],
+  terms:[['Option 1','USD loan at 12% p.a. into working capital, up to 12 months'],['Option 2','Short-term fixed-coupon loans, 30–90 days, against specific export deals'],['Option 3','Profit share with optional guaranteed minimum return'],['Security','Pledge of goods in bonded warehouse, independent warehouse receipts, 100% cargo insurance'],['Compliance','KYC, beneficiary disclosure under NDA, GAFTA/GPC counterparty screening']]
+},
+];
+const IND = [...new Set(LISTINGS.map(l=>l.industry))];
+
+/* =============== COVERS =============== */
+function cover(id){
+  const s = {
+  'petit-paradis':`<svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Petit Paradis">
+    <rect width="400" height="250" fill="#E9EDDF"/>
+    <circle cx="320" cy="60" r="90" fill="#F3E3CE"/>
+    <circle cx="90" cy="230" r="110" fill="#DEE5CB"/>
+    <circle cx="150" cy="90" r="46" fill="#E8B9C6"/>
+    <circle cx="150" cy="90" r="30" fill="#E9EDDF"/>
+    <path d="M40 170 Q120 110 200 170 T360 170" stroke="#B9C49A" stroke-width="7" fill="none"/>
+    <circle cx="280" cy="180" r="24" fill="#E8B9C6"/>
+    <circle cx="330" cy="200" r="14" fill="#D9A94B"/>
+  </svg>`,
+  'like-bricks':`<svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Like Bricks">
+    <rect width="400" height="250" fill="#F6EFE2"/>
+    <rect x="30" y="140" width="110" height="60" rx="8" fill="#E84C8B"/><circle cx="60" cy="140" r="13" fill="#E84C8B"/><circle cx="110" cy="140" r="13" fill="#E84C8B"/>
+    <rect x="150" y="100" width="110" height="60" rx="8" fill="#7A4FD0"/><circle cx="180" cy="100" r="13" fill="#7A4FD0"/><circle cx="230" cy="100" r="13" fill="#7A4FD0"/>
+    <rect x="270" y="150" width="100" height="55" rx="8" fill="#2BB5A0"/><circle cx="297" cy="150" r="12" fill="#2BB5A0"/><circle cx="343" cy="150" r="12" fill="#2BB5A0"/>
+    <rect x="90" y="52" width="96" height="52" rx="8" fill="#F4B93C"/><circle cx="115" cy="52" r="11" fill="#F4B93C"/><circle cx="160" cy="52" r="11" fill="#F4B93C"/>
+  </svg>`,
+  'tg-mena':`<svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="True Gamers">
+    <rect width="400" height="250" fill="#0B0E0C"/>
+    <path d="M0 200 L140 60 L200 120 L280 30 L400 160" stroke="#6DFF8A" stroke-width="3" fill="none" opacity=".9"/>
+    <path d="M0 230 L140 90 L200 150 L280 60 L400 190" stroke="#2E7A45" stroke-width="2" fill="none"/>
+    <rect x="300" y="180" width="70" height="40" rx="6" fill="none" stroke="#6DFF8A" stroke-width="2"/>
+    <circle cx="70" cy="55" r="4" fill="#6DFF8A"/><circle cx="330" cy="70" r="3" fill="#6DFF8A"/>
+  </svg>`,
+  'ags-foods':`<svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AGS Foods">
+    <rect width="400" height="250" fill="#0E1B2E"/>
+    <path d="M0 190 Q100 160 200 190 T400 190 V250 H0 Z" fill="#122642"/>
+    <g fill="#D9A94B">
+      <circle cx="60" cy="80" r="5"/><circle cx="90" cy="60" r="4"/><circle cx="120" cy="85" r="5"/><circle cx="150" cy="55" r="4"/>
+      <circle cx="185" cy="80" r="5"/><circle cx="220" cy="58" r="4"/><circle cx="255" cy="84" r="5"/><circle cx="290" cy="60" r="4"/>
+      <circle cx="325" cy="82" r="5"/><circle cx="355" cy="58" r="4"/>
+    </g>
+    <path d="M40 140 Q200 110 360 140" stroke="#D9A94B" stroke-width="2.5" fill="none"/>
+    <rect x="150" y="176" width="100" height="34" rx="6" fill="#0A1526" stroke="#D9A94B" stroke-width="1.5"/>
+    <text x="200" y="199" text-anchor="middle" font-family="Inter Tight,Arial" font-weight="600" font-size="15" fill="#D9A94B" letter-spacing="3">AGS</text>
+  </svg>`,
+  'vicekeeper':`<svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vicekeeper">
+    <rect width="400" height="250" fill="#1C1B19"/>
+    <rect x="200" width="200" height="250" fill="#EFE9DC"/>
+    <path d="M200 40 L235 62 V115 Q235 150 200 168 Q165 150 165 115 V62 Z" fill="none" stroke="#A08035" stroke-width="3"/>
+    <path d="M200 70 L216 81 V112 Q216 130 200 140 Q184 130 184 112 V81 Z" fill="#A08035" opacity=".85"/>
+    <text x="100" y="220" text-anchor="middle" font-family="Inter Tight,Arial" font-size="14" fill="#A08035" letter-spacing="4">VICEKEEPER</text>
+    <text x="300" y="220" text-anchor="middle" font-family="Inter Tight,Arial" font-size="12" fill="#7A6B45" letter-spacing="2">TADBEER · DUBAI</text>
+  </svg>`,
+  'iomatex':`<svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="iOMATEX">
+    <rect width="400" height="250" fill="#17181C"/>
+    <path d="M30 180 C110 80 290 280 370 90" stroke="#E0A93E" stroke-width="2.5" fill="none"/>
+    <path d="M30 90 C110 280 290 80 370 180" stroke="#6B5A22" stroke-width="2" fill="none"/>
+    <g fill="#E0A93E"><circle cx="30" cy="180" r="5"/><circle cx="200" cy="135" r="5"/><circle cx="370" cy="90" r="5"/><circle cx="110" cy="128" r="4"/><circle cx="300" cy="150" r="4"/></g>
+    <rect x="160" y="30" width="80" height="26" rx="6" fill="none" stroke="#E0A93E" stroke-width="1.5"/>
+    <text x="200" y="48" text-anchor="middle" font-family="Inter Tight,Arial" font-weight="600" font-size="12" fill="#E0A93E" letter-spacing="2">iOMATEX</text>
+  </svg>`
+  };
+  return s[id] || '';
+}
+
+/* =============== PHOTOS ===============
+   Drop real photos into  assets/<listing-id>/1.jpg, 2.jpg, 3.jpg …
+   1.jpg is the cover, 2–6 fill the gallery on the deal page.
+   jpg / jpeg / png / webp all work. If a file is missing, the drawn
+   placeholder is shown instead — nothing breaks. */
+const EXT=['jpg','jpeg','png','webp'];
+/* Video tours are not shot yet — the placeholder is kept in the code and hidden.
+   Flip to true when the videos are ready: the badge returns to the card and the
+   video tile stays last in the gallery, after the business photos. */
+const SHOW_VIDEO=false;
+/* Logo: assets/logos/<listing-id>.png  (or .svg / .jpg / .webp).
+   Until it is uploaded the slot shows a monogram, so the layout never jumps. */
+const LEXT=['png','svg','jpg','webp'];
+function logoTile(l,cls){
+  const mono=l.name.split(/\s+/).filter(w=>/[A-Za-z0-9]/.test(w[0])).slice(0,2).map(w=>w[0].toUpperCase()).join('');
+  return `<span class="ltile ${cls||''}" data-mono="${mono}"><img src="assets/logos/${l.id}.${LEXT[0]}" data-id="${l.id}" data-e="0" alt="${esc(l.name)} logo" onerror="logoFail(this)"></span>`;
+}
+function logoFail(el){
+  const e=+el.dataset.e+1;
+  if(e<LEXT.length){el.dataset.e=e;el.src=`assets/logos/${el.dataset.id}.${LEXT[e]}`;return;}
+  const p=el.parentElement; p.classList.add('empty'); p.textContent=p.dataset.mono||'';
+}
+function photo(id,n,alt,strict){
+  return `<img src="assets/${id}/${n}.${EXT[0]}" data-id="${id}" data-n="${n}" data-e="0"${strict?' data-strict="1"':''} alt="${esc(alt||'')}" loading="lazy" onerror="phFail(this)">`;
+}
+function phFail(el){
+  const e=+el.dataset.e+1;
+  if(e<EXT.length){el.dataset.e=e;el.src=`assets/${el.dataset.id}/${el.dataset.n}.${EXT[e]}`;return;}
+  if(el.dataset.strict){const tb=el.closest('.tb');(tb||el).remove();galSync();return;}
+  const w=document.createElement('div');
+  w.style.cssText='width:100%;height:100%';
+  w.innerHTML=cover(el.dataset.id);
+  el.replaceWith(w);
+}
+
+/* ---------- gallery ---------- */
+function galleryHTML(l){
+  const N=12;
+  return `
+  <div class="dmedia" id="gmain">
+    ${photo(l.id,1,l.name)}
+    <button class="gnav prev" onclick="galStep(-1)" aria-label="Previous photo">‹</button>
+    <button class="gnav next" onclick="galStep(1)" aria-label="Next photo">›</button>
+    <span class="gcount num" id="gcount"></span>
+    ${SHOW_VIDEO?`<div class="play"><button aria-label="Play video tour"><i></i></button></div><div class="lbl">VIDEO TOUR · ${l.vid}</div>`:''}
+  </div>
+  <div class="thumbs" id="gthumbs">
+    ${Array.from({length:N},(_,i)=>`<button class="tb${i?'':' on'}" data-n="${i+1}" onclick="galPick(this)" aria-label="Photo ${i+1}">${photo(l.id,i+1,'',true)}</button>`).join('')}
+    ${SHOW_VIDEO?`<button class="tb tbv" onclick="alert('Video tour — prototype')" aria-label="Video tour"><i></i><span>${l.vid}</span></button>`:''}
+  </div>`;
+}
+function galTiles(){return [...document.querySelectorAll('#gthumbs .tb:not(.tbv)')];}
+function galSync(){
+  const t=galTiles(), c=document.getElementById('gcount');
+  if(!c)return;
+  const i=t.findIndex(x=>x.classList.contains('on'));
+  c.textContent=`${i<0?1:i+1} / ${t.length}`;
+  c.style.display=t.length>1?'':'none';
+  document.querySelectorAll('.gnav').forEach(b=>b.style.display=t.length>1?'':'none');
+  document.getElementById('gthumbs').style.display=t.length>1?'':'none';
+}
+function galPick(btn){
+  const img=btn.querySelector('img'), main=document.querySelector('#gmain img');
+  if(!img||!main)return;
+  main.src=img.src;
+  galTiles().forEach(t=>t.classList.toggle('on',t===btn));
+  btn.scrollIntoView({block:'nearest',inline:'nearest',behavior:'smooth'});
+  galSync();
+}
+function galStep(d){
+  const t=galTiles(); if(!t.length)return;
+  let i=t.findIndex(x=>x.classList.contains('on')); if(i<0)i=0;
+  galPick(t[(i+d+t.length)%t.length]);
+}
+function galKeys(e){
+  if(!document.getElementById('gmain')||$('#mroot').innerHTML)return;
+  if(e.key==='ArrowLeft')galStep(-1);
+  if(e.key==='ArrowRight')galStep(1);
+}
+addEventListener('keydown',galKeys);
+
+/* =============== HELPERS =============== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+const ARR='<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M4 2h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const ic=()=>`<span class="ic">${ARR}</span>`;
+const LOGO='<svg width="30" height="16" viewBox="0 0 40 20" fill="none" aria-hidden="true"><path d="M10 2C21 2 19 18 30 18c6 0 8-4 8-8s-2-8-8-8C19 2 21 18 10 18c-6 0-8-4-8-8s2-8 8-8Z" stroke="#7B93FF" stroke-width="2.6"/></svg>';
+/* OKKO CAP brand logo: assets/logos/okko-cap.svg (or .png / .webp).
+   Use a light version — it sits on the dark header and footer. If the file is
+   missing, the drawn mark + wordmark below is used instead. */
+const BEXT=['svg','png','webp','jpg'];
+const BRAND=`<img class="brand" src="assets/logos/okko-cap.${BEXT[0]}" data-e="0" alt="OKKO CAP" onerror="brandFail(this)">`;
+function brandFail(el){
+  const e=+el.dataset.e+1;
+  if(e<BEXT.length){el.dataset.e=e;el.src=`assets/logos/okko-cap.${BEXT[e]}`;return;}
+  const p=el.parentElement; p.innerHTML=LOGO+' OKKO<b>CAP</b>';
+}
+const VF='<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#177A50"/><path d="M4.5 8.2 7 10.6 11.5 5.6" stroke="#fff" stroke-width="1.8" fill="none"/></svg>';
+const badge=t=>t==='sale'?'<span class="bdg bdg-sale">For sale</span>':'<span class="bdg bdg-raise">Raising</span>';
+
+/* =============== CHROME =============== */
+function renderHeader(active){
+  const on=p=>active===p?'class="on"':'';
+  $('#hdr').innerHTML=`<div class="wrap hd">
+    <a class="logo" href="#/">${BRAND}</a>
+    <nav class="main">
+      <a href="#/market" ${on('market')}>Marketplace</a>
+      <a href="#/list" ${on('list')}>Sell a business</a>
+      <a href="#/list">Raise capital</a>
+      <a href="#/advisory" ${on('advisory')}>Advisory</a>
+    </nav>
+    <span class="sp"></span>
+    <a class="sign" href="#/login">Sign in</a>
+    <a class="btn btn-w btn-sm" href="#/list"><span class="long">List your deal · AED 499</span><span class="short">List your deal</span>${ic()}</a>
+  </div>`;
+}
+function renderFooter(){
+  $('#ftr').innerHTML=`<div class="wrap">
+    <div class="ft">
+      <div class="about">
+        <a class="logo" href="#/">${BRAND}</a>
+        <p>The Gulf’s curated marketplace for buying businesses and backing growth. Every listing is screened and standardized.</p>
+      </div>
+      <div><h4>Marketplace</h4>
+        <a href="#/market">Browse deals</a>
+        <a href="#/market?t=sale">Businesses for sale</a>
+        <a href="#/market?t=raise">Raising capital</a>
+        <a href="#/list">List your deal</a>
+      </div>
+      <div><h4>Company</h4>
+        <a href="#/advisory">About OKKO Capital</a>
+        <a href="#/advisory">Sell-side advisory</a>
+        <a href="#/advisory">Fundraising mandates</a>
+        <a href="#/account">Seller console</a>
+      </div>
+      <div><h4>Contact</h4>
+        <a href="mailto:sales@okkocap.com">sales@okkocap.com</a>
+        <a href="tel:+971527922531">+971 52 792 2531</a>
+        <a href="#/">Dubai, UAE</a>
+      </div>
+    </div>
+    <p class="legal">OKKO CAP is an online listing platform. We are not a licensed broker, dealer, financial adviser or investment intermediary, and nothing on this site is investment advice or an offer of securities. We do not accept, hold or transfer buyer or investor funds; all negotiations and transactions take place directly between users. Listing information, financial figures and projections are provided by sellers and are not guaranteed by OKKO CAP.</p>
+    <div class="fbot"><span>© 2026 OKKO Capital · okkocap.com</span><span>Prototype v0.3 · internal review</span></div>
+    <div class="fmark" aria-hidden="true">OKKO CAP</div>
+  </div>`;
+}
+function tickerHTML(){
+  const item=(l,dup)=>`<a class="it" href="#/deal/${l.id}"${dup?' aria-hidden="true" tabindex="-1"':''}><span class="tag">${l.type==='sale'?'FOR SALE':'RAISING'}</span> <b>${l.name.toUpperCase()}</b> · ${l.ask} <span class="up">· ${l.met[0][1]}</span></a>`;
+  const items = LISTINGS.map(l=>item(l,false)).join('');
+  const dup = LISTINGS.map(l=>item(l,true)).join('');
+  return `<div class="ticker"><div class="in">${items}${dup}</div></div>`;
+}
+
+/* =============== CARD =============== */
+function cardHTML(l){
+  return `<a class="card" href="#/deal/${l.id}">
+    <div class="cov">${photo(l.id,1,l.name)}
+      <div class="badges">${badge(l.type)}<span class="bdg bdg-chip">${l.chip}</span></div>
+      ${SHOW_VIDEO?`<div class="vid"><i></i>VIDEO · ${l.vid}</div>`:''}
+      ${logoTile(l)}
+    </div>
+    <div class="cbody">
+      <div class="ind"><span>${l.industry}</span><span class="vf">${VF} Screened</span></div>
+      <h3>${l.name}</h3>
+      <p class="tg">${l.tag}</p>
+      <div class="cmet">${l.met.map(m=>`<span>${m[0]}&nbsp;<b class="num">${m[1]}</b></span>`).join('')}<span>Documents&nbsp;<b>${dealDocs(l).reduce((n,g)=>n+g.files.length,0)}</b></span></div>
+      ${l.met.some(m=>m[0].includes('*'))?'<p class="fnote">* Seller’s projection, not a promise of return</p>':''}
+      <div class="cnum"><div><b class="num">${l.ask}</b><span>${l.askLabel}</span></div><span class="go">${ARR}</span></div>
+    </div>
+  </a>`;
+}
+
+/* =============== HOME =============== */
+function homePage(){
+  return `
+  <section class="hero dk">
+    <div class="grid-bg"></div><div class="glow"></div><div class="glow2"></div>
+    <div class="wrap hero-inner">
+      <div>
+        <p class="eyebrow">okkocap.com · Dubai, UAE</p>
+        <h1>Where businesses <em>change hands</em> <span class="thin">and capital finds them.</span></h1>
+        <p class="sub">The Gulf’s curated marketplace for two kinds of deals: buying an operating business and backing a company that is raising. Every listing is screened, standardized into one format — and you negotiate directly with the owner.</p>
+        <div class="cta">
+          <a class="btn btn-w btn-lg" href="#/market">Browse deals${ic()}</a>
+          <a class="btn btn-gh btn-lg" href="#/list">List your deal for AED 499${ic()}</a>
+        </div>
+      </div>
+      <a class="float" href="#/deal/petit-paradis">
+        <div class="th">${photo('petit-paradis',1,'Petit Paradis')}</div>
+        <div class="fl">
+          <div>
+            <span class="tag">For sale · screened</span>
+            <h4>Petit Paradis</h4>
+            <small>City Walk, Dubai · AED 3.5M · ≈ 2.7×</small>
+          </div>
+          <span class="go">${ARR}</span>
+        </div>
+      </a>
+    </div>
+    <div class="wrap">
+      <div class="hero-foot">
+        <div><b class="num">AED 24M+</b><span>Deal value listed</span></div>
+        <div><b class="num">4</b><span>Live screened deals</span></div>
+        <div><b class="num">2</b><span>Sale &amp; raise</span></div>
+        <div><b class="num">100%</b><span>Photos &amp; documents</span></div>
+      </div>
+    </div>
+    <div class="ghost" aria-hidden="true">OKKO CAP</div>
+  </section>
+
+  ${tickerHTML()}
+
+  <section class="stmt">
+    <div class="wrap">
+      <div class="top">
+        <p class="eyebrow">Why OKKO CAP</p>
+      </div>
+      <h2>OKKO CAP is a screened marketplace where operating businesses <span class="dim">change hands and founders raise capital — one format, real numbers, direct contact with the owner</span></h2>
+    </div>
+    <div class="wrap tiles">
+      <div class="tile tile-d s1"><span class="pill">01 · Moderation</span><span class="dot"></span>
+        <div><h3>Screened,<br>not scraped</h3><p>Every listing passes moderation before it goes live: documents reviewed for completeness, claims for consistency.</p></div>
+        <div class="streak"></div></div>
+      <div class="tile tile-l s2"><span class="pill">02 · Format</span><span class="dot"></span>
+        <div><h3>One card<br>format</h3><p>Video tour, the same key facts in the same order, clear terms. Any two deals compare side by side.</p></div></div>
+      <div class="tile tile-a s3"><span class="pill">03 · Demand</span><span class="dot"></span>
+        <div><h3>Real buyer<br>traffic</h3><p>The audience we already bring to our portfolio work lands here: qualified buyers and investors, not tire-kickers.</p></div></div>
+      <div class="tile tile-d s4"><span class="pill">04 · Deals</span><span class="dot"></span>
+        <div><h3>Direct,<br>no commission</h3><p>Enquiries go straight to the owner. OKKO CAP never holds funds and takes no commission on the transaction.</p></div>
+        <div class="streak"></div></div>
+    </div>
+  </section>
+
+  <section class="sec dk">
+    <div class="wrap">
+      <div class="sec-hd">
+        <div><p class="eyebrow">Live now</p><h2>Deals on the platform</h2>
+        <p class="sd">Four screened deals: operating businesses changing hands and companies raising equity or debt.</p></div>
+        <a class="btn btn-gh" href="#/market">View full catalog${ic()}</a>
+      </div>
+      <div class="cards">${LISTINGS.map((l,i)=>cardHTML(l,i)).join('')}</div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-hd">
+        <div><p class="eyebrow">For sellers and founders</p><h2>List your deal in one evening</h2>
+        <p class="sd">Our forms ask exactly what buyers ask. Moderation within 24 hours, then your deal is in front of the Gulf’s buyer traffic.</p></div>
+        <a class="btn btn-d" href="#/list">Create a listing${ic()}</a>
+      </div>
+      <div class="steps">
+        <div class="step"><b class="n">Step 1</b><h3>Fill the form</h3><p>Business or fundraise, key numbers, your terms. Our forms ask exactly what buyers ask.</p></div>
+        <div class="step"><b class="n">Step 2</b><h3>Add media</h3><p>Photos plus a one-minute video walkthrough. Deals with video sell faster and higher.</p></div>
+        <div class="step"><b class="n">Step 3</b><h3>Pick a package</h3><p>AED 499 a month, or AED 999 for three months. A flat listing fee, no commission on the deal.</p></div>
+        <div class="step"><b class="n">Step 4</b><h3>Go live</h3><p>Moderation within 24 hours. Then your deal is in front of the Gulf’s buyer traffic.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec dk">
+    <div class="wrap">
+      <div class="sec-hd"><div><p class="eyebrow">Pricing</p><h2>Two ways to work with us</h2></div></div>
+      <div class="twocol">
+        <div class="offer d">
+          <p class="eyebrow">Self-service</p>
+          <h3>Marketplace listing</h3>
+          <div class="pr">AED 499 <small>/ month · AED 999 / 3 months</small></div>
+          <p class="od">For owners and founders who want qualified exposure without a mandate.</p>
+          <ul><li>Standardized listing with video tour</li><li>Enquiries go directly to you, no commission</li><li>Dashboard with views, enquiries and statuses</li><li>Cancel any month</li></ul>
+          <a class="btn btn-b" href="#/list">Create a listing${ic()}</a>
+        </div>
+        <div class="offer d">
+          <p class="eyebrow">Full service</p>
+          <h3>OKKO Capital mandate</h3>
+          <div class="pr">Retainer <small>+ success fee</small></div>
+          <p class="od">We package the deal, run the marketing, qualify buyers and drive the transaction to close.</p>
+          <ul><li>Teaser, pitch deck, financial model, data room</li><li>Paid buyer acquisition and CRM-run funnel</li><li>NDA, viewings, LOI, structured handover</li><li>Typical sell-side cycle: 3 months</li></ul>
+          <a class="btn btn-gh" href="#/advisory">Talk to the team${ic()}</a>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
+/* =============== CATALOG =============== */
+const FS={type:'all',ind:'all',q:'',sort:'featured'};
+function marketPage(){
+  return `
+  <div class="phead"><div class="grid-bg"></div><div class="glow"></div><div class="wrap">
+    <p class="eyebrow">Catalog</p>
+    <div class="row"><h1>All deals</h1>
+      <p class="sub" style="max-width:40ch;margin-bottom:6px">Businesses for sale and companies raising capital — screened to one standard, photos and documents on every listing.</p></div>
+  </div></div>
+  <section class="sec tight"><div class="wrap">
+    <div class="filters">
+      <div class="frow">
+        <span class="flabel">Deal type</span>
+        <div class="ftabs" role="tablist">
+          <button data-t="all" ${FS.type==='all'?'class="on"':''}>All</button>
+          <button data-t="sale" ${FS.type==='sale'?'class="on"':''}>For sale</button>
+          <button data-t="raise" ${FS.type==='raise'?'class="on"':''}>Raising</button>
+        </div>
+        <span class="sp"></span>
+        <div class="fright">
+          <input type="search" id="fq" placeholder="Search deals" value="${esc(FS.q)}" aria-label="Search deals">
+          <select id="fsort" aria-label="Sort">
+            <option value="featured" ${FS.sort==='featured'?'selected':''}>Featured</option>
+            <option value="az" ${FS.sort==='az'?'selected':''}>A to Z</option>
+          </select>
+        </div>
+      </div>
+      <div class="frow">
+        <span class="flabel">Industry</span>
+        ${IND.map(i=>`<button class="chip ${FS.ind===i?'on':''}" data-i="${esc(i)}">${i}</button>`).join('')}
+      </div>
+    </div>
+    <p class="rescount" id="rc"></p>
+    <div class="cards" id="grid"></div>
+  </div></section>`;
+}
+function renderGrid(){
+  let r = LISTINGS.filter(l=>(FS.type==='all'||l.type===FS.type)&&(FS.ind==='all'||l.industry===FS.ind));
+  if(FS.q) r=r.filter(l=>(l.name+l.tag+l.industry+l.loc).toLowerCase().includes(FS.q.toLowerCase()));
+  if(FS.sort==='az') r=[...r].sort((a,b)=>a.name.localeCompare(b.name));
+  $('#rc').textContent = r.length+' deal'+(r.length===1?'':'s')+' · screened to one standard';
+  $('#grid').innerHTML = r.length? r.map((l,i)=>cardHTML(l,i)).join('') : '<p style="color:var(--mut)">Nothing matches these filters yet.</p>';
+}
+function bindMarket(){
+  document.querySelectorAll('.ftabs button').forEach(b=>b.onclick=()=>{FS.type=b.dataset.t;document.querySelectorAll('.ftabs button').forEach(x=>x.classList.toggle('on',x===b));renderGrid();});
+  document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{
+    FS.ind = (FS.ind===c.dataset.i)?'all':c.dataset.i;
+    document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x.dataset.i===FS.ind));
+    renderGrid();
+  });
+  $('#fq').oninput=e=>{FS.q=e.target.value;renderGrid();};
+  $('#fsort').onchange=e=>{FS.sort=e.target.value;renderGrid();};
+  renderGrid();
+}
+
+/* =============== DEAL DOCUMENTS =============== */
+const UNLOCKED = (()=>{try{return JSON.parse(sessionStorage.getItem('okko_unlocked')||'{}')}catch(e){return {}}})();
+function unlock(id){UNLOCKED[id]=true;try{sessionStorage.setItem('okko_unlocked',JSON.stringify(UNLOCKED))}catch(e){}}
+function dealDocs(l){
+  const sale = l.type==='sale';
+  return [
+    {cat:'Presentation', gate:'open', files:[
+      {ext:'PDF',name:(sale?'Teaser — ':'Pitch deck — ')+l.name+'.pdf',size:'1.2 MB'}]},
+    {cat:'Presentation', gate:'contacts', files:[
+      {ext:'PPTX',name:(sale?'Full presentation':'Investor presentation')+'.pptx',size:'8.4 MB'}]},
+    {cat:'Financial documents', gate:'contacts', files:[
+      {ext:'XLSX',name:'P&L by month, last 12 months.xlsx',size:'340 KB'},
+      {ext:'XLSX',name:sale?'Revenue & cost breakdown.xlsx':'Financial model 2026–2029.xlsx',size:'620 KB'}]},
+    {cat:'Legal & licence', gate:'nda', files:[
+      {ext:'PDF',name:sale?'Trade licence & lease.pdf':'Corporate documents & term sheet.pdf',size:'2.8 MB'}]}
+  ];
+}
+function docsBlock(l){
+  const open = !!UNLOCKED[l.id];
+  const groups = dealDocs(l);
+  const rows = g => g.files.map(f=>{
+    const can = g.gate==='open' || (g.gate==='contacts' && open);
+    return `<div class="docrow">
+      <span class="di">${f.ext}</span>
+      <span><b style="font-weight:500">${f.name}</b><br><span class="dm">${f.size} · ${g.cat}</span></span>
+      <span class="sp"></span>
+      ${can
+        ? `<a class="btn btn-o btn-sm" href="#" onclick="event.preventDefault();alert('Download — prototype')">Download${ic()}</a>`
+        : g.gate==='contacts'
+          ? `<button class="btn btn-d btn-sm" onclick="openContact('${l.id}','docs')">Leave contacts${ic()}</button>`
+          : `<span class="gate">After NDA</span>`}
+    </div>`;
+  }).join('');
+  return `
+    ${open?`<p class="unlocked">${VF} Documents unlocked. The owner has your contacts and will follow up.</p>`
+          :`<p class="note" style="margin:0 0 14px">The teaser is open to everyone. The presentation and financials unlock right after you leave your contacts — the owner receives them at the same moment. Legal documents open after a signed NDA.</p>`}
+    ${groups.map(rows).join('')}
+    ${open?'':`<div style="margin-top:18px"><button class="btn btn-d btn-sm" onclick="openContact('${l.id}','docs')">Unlock presentation &amp; financials${ic()}</button></div>`}`;
+}
+
+/* =============== DEAL =============== */
+function dealPage(id){
+  const l = LISTINGS.find(x=>x.id===id);
+  if(!l) return `<div class="phead"><div class="grid-bg"></div><div class="wrap"><h1>Deal not found</h1>
+    <p class="sub">This listing is no longer available.</p><p style="margin-top:24px"><a class="btn btn-w" href="#/market">Back to catalog${ic()}</a></p></div></div>`;
+  return `
+  <div class="phead" style="padding-bottom:40px"><div class="grid-bg"></div><div class="glow"></div><div class="wrap">
+    <p class="crumb"><a href="#/market">Marketplace</a> &nbsp;/&nbsp; ${l.industry} &nbsp;/&nbsp; ${l.name}</p>
+    <div class="row">
+      <div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:16px">${badge(l.type)}<span class="bdg bdg-chip">${l.chip}</span><span class="bdg" style="background:rgba(255,255,255,.08);color:#5CD99A;border:1px solid rgba(92,217,154,.35)">Screened</span></div>
+        <div style="display:flex;gap:18px;align-items:center">
+          ${logoTile(l,'lg')}
+          <div><h1>${l.name}</h1><p class="sub" style="margin-top:10px">${l.loc} · ${l.industry}</p></div>
+        </div>
+      </div>
+      <a class="btn btn-w btn-lg" href="#contact" onclick="event.preventDefault();openContact('${l.id}')">Contact the owner${ic()}</a>
+    </div>
+  </div></div>
+  <div class="wrap">
+    <div class="deal">
+      <div>
+        ${galleryHTML(l)}
+
+        <div class="dsec"><h3>About the deal</h3>${l.about.map(p=>`<p>${p}</p>`).join('')}</div>
+        <div class="dsec"><h3>Business model</h3><ul>${l.model.map(m=>`<li>${m}</li>`).join('')}</ul></div>
+        <div class="dsec"><h3>Financial highlights</h3><table class="ftable">${l.fin.map(f=>`<tr><td>${f[0]}</td><td class="num">${f[1]}</td></tr>`).join('')}</table></div>
+        <div class="dsec"><h3>Traction</h3><ul>${l.traction.map(t=>`<li>${t}</li>`).join('')}</ul></div>
+        <div class="dsec"><h3>Terms</h3><table class="ftable">${l.terms.map(t=>`<tr><td style="color:var(--mut);width:32%">${t[0]}</td><td style="text-align:left;font-weight:400">${t[1]}</td></tr>`).join('')}</table></div>
+        <div class="dsec" id="docs"><h3>Documents</h3>${docsBlock(l)}</div>
+      </div>
+
+      <aside class="rail">
+        <div class="fact">
+          <div class="glowf"></div>
+          <div class="fl">${l.askLabel}</div>
+          <div class="fv num">${l.ask}</div>
+          <div class="fn">${l.askNote}</div>
+          <div class="rows">${l.facts.map(f=>`<div><span>${f[0]}</span><b>${f[1]}</b></div>`).join('')}</div>
+          ${l.facts.some(f=>f[0].includes('*'))?'<p style="font-size:11px;color:var(--mut-d);margin:-12px 0 18px">* Seller’s projection, not a promise of return</p>':''}
+          <button class="btn btn-w btn-lg full" onclick="openContact('${l.id}')">Contact the owner${ic()}</button>
+          <p style="font-size:12px;color:var(--mut-d);margin-top:14px;text-align:center;line-height:1.5">You deal directly with the owner. OKKO CAP does not hold or transfer funds.</p>
+        </div>
+        <div class="advc">
+          <div class="vf">${VF} Screened listing</div>
+          All information is provided by the owner. Documents are reviewed at moderation for completeness and consistency. Full data room after NDA, directly from the owner.<br><br>
+          <b>Listing support:</b> OKKO CAP team<br>sales@okkocap.com · +971 52 792 2531
+        </div>
+      </aside>
+    </div>
+
+    <section class="sec tight" style="border-top:1px solid var(--line)">
+      <div class="sec-hd"><div><p class="eyebrow">Keep looking</p><h2>Other deals on the platform</h2></div>
+        <a class="btn btn-o" href="#/market">Full catalog${ic()}</a></div>
+      <div class="cards">${LISTINGS.filter(x=>x.id!==l.id).slice(0,3).map((x,i)=>cardHTML(x,i)).join('')}</div>
+    </section>
+  </div>`;
+}
+
+/* =============== CONTACT MODAL =============== */
+function openContact(id,intent){
+  const l=LISTINGS.find(x=>x.id===id)||LISTINGS[0];
+  const docs = intent==='docs';
+  $('#mroot').innerHTML=`<div class="mroot" onclick="if(event.target===this)closeModal()">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Contact form">
+      <button class="x" onclick="closeModal()" aria-label="Close">×</button>
+      <h2>${docs?'Get the documents':'Request details'}</h2>
+      <p class="ms">${l.name} · ${l.ask} · ${docs?'presentation and financials unlock immediately after you submit this form.':'your enquiry goes to the deal advisor.'}</p>
+      <form onsubmit="sentContact(event,'${l.id}',${docs})">
+        <div><label class="f" for="cn">Name</label><input class="f" id="cn" required></div>
+        <div><label class="f" for="ce">Email</label><input class="f" id="ce" type="email" required></div>
+        <div><label class="f" for="cp">Phone / WhatsApp</label><input class="f" id="cp" ${docs?'required':''}></div>
+        <div><label class="f" for="cm">Message</label><textarea class="f" id="cm" rows="3">${docs?'Please give me access to the presentation and financials for '+l.name+'.':'I would like to receive the full information pack on '+l.name+'.'}</textarea></div>
+        <label class="chk"><input type="checkbox" required> ${docs?'I agree that my contacts are shared with the owner of this listing.':'I agree to sign an NDA to receive the full data room.'}</label>
+        <button class="btn btn-b btn-lg full" type="submit">${docs?'Get the documents':'Send enquiry'}${ic()}</button>
+      </form>
+    </div></div>`;
+  document.addEventListener('keydown',escClose);
+}
+function escClose(e){if(e.key==='Escape')closeModal();}
+function sentContact(e,id,docs){
+  e.preventDefault();
+  if(docs&&id){unlock(id);const b=document.getElementById('docs');const l=LISTINGS.find(x=>x.id===id);if(b&&l)b.innerHTML='<h3>Documents</h3>'+docsBlock(l);}
+  $('#mroot .modal').innerHTML=`<div style="text-align:center;padding:20px 6px">
+    <div style="width:66px;height:66px;border-radius:50%;background:var(--okt);color:var(--ok);display:grid;place-items:center;font-size:28px;margin:0 auto 20px">✓</div>
+    <h2 style="margin-bottom:10px">${docs?'Documents unlocked':'Enquiry sent'}</h2>
+    <p style="color:var(--mut);margin-bottom:24px;line-height:1.6">${docs
+      ? 'The presentation and financials are open on this page and a copy is on its way to your email. Legal documents open after a signed NDA.'
+      : 'The deal advisor will come back to you within one business day with the NDA and next steps.'}</p>
+    <button class="btn btn-d" onclick="closeModal()" style="margin:0 auto">${docs?'Go to the documents':'Done'}${ic()}</button></div>`;
+}
+function closeModal(){$('#mroot').innerHTML='';document.removeEventListener('keydown',escClose);}
+
+/* =============== WIZARD =============== */
+const GATES={open:'Public',contacts:'After contacts',nda:'After NDA'};
+const W={step:0,type:null,plan:'1m',data:{},
+  docs:{
+    deck:{t:'Presentation / pitch deck',s:'Teaser or investor deck — the first thing a buyer opens',g:'contacts'},
+    fin:{t:'Financial documents',s:'P&L, financial model, bank or POS statements',g:'contacts'},
+    legal:{t:'Legal & licence',s:'Trade licence, lease, corporate documents',g:'nda'}
+  },
+  files:{deck:[{ext:'PDF',name:'Teaser — Petit Paradis.pdf'}],fin:[],legal:[]}};
+function listPage(){return `
+  <div class="phead" style="padding-bottom:44px"><div class="grid-bg"></div><div class="glow"></div><div class="wrap">
+    <p class="eyebrow">Create a listing</p>
+    <div class="row"><h1>List your deal</h1>
+      <p class="sub" style="max-width:38ch;margin-bottom:6px">A flat fee, no commission on the transaction. Five steps, moderation within 24 hours.</p></div>
+  </div></div>
+  <div class="wiz" id="wiz">${wizStep()}</div>`;}
+function wizBar(){return `<div class="wsteps" aria-hidden="true">${[0,1,2,3,4].map(i=>`<i ${i<=W.step?'class="on"':''}></i>`).join('')}</div>`;}
+function wizStep(){
+  if(W.step===0)return `
+    <p class="eyebrow">Create a listing · step 1 of 5</p>
+    <h2 class="wtitle">What are you listing?</h2>${wizBar()}
+    <div class="pick">
+      <button data-w="sale" ${W.type==='sale'?'class="on"':''}><h3>Sell a business</h3><p>An operating business changing hands: full or partial sale, asset or share deal.</p></button>
+      <button data-w="raise" ${W.type==='raise'?'class="on"':''}><h3>Raise capital</h3><p>Equity, SAFE or debt into an operating company or a new location.</p></button>
+    </div>
+    <div class="wnav"><span></span><button class="btn btn-b btn-lg" id="wnext" ${W.type?'':'disabled'}>Continue${ic()}</button></div>`;
+  if(W.step===1)return `
+    <p class="eyebrow">Create a listing · step 2 of 5</p>
+    <h2 class="wtitle">The basics</h2>${wizBar()}
+    <div class="wcard"><div class="fgrid">
+      <div class="full"><label class="f" for="w-name">Business / project name</label><input class="f" id="w-name" placeholder="e.g. Petit Paradis" value="${esc(W.data.name||'')}"></div>
+      <div><label class="f" for="w-ind">Category</label><select class="f" id="w-ind">${['F&B','Retail & E-commerce','Kids & Family','Beauty & Health','Entertainment & Leisure','Services','Real Estate & PropTech','Tech & SaaS','Trading & Logistics','Manufacturing'].map(i=>`<option>${i}</option>`).join('')}</select></div>
+      <div><label class="f" for="w-loc">Location</label><select class="f" id="w-loc">${['Dubai','Abu Dhabi','Sharjah','Ras Al Khaimah','Ajman','Other UAE','Saudi Arabia','Other GCC'].map(i=>`<option>${i}</option>`).join('')}</select></div>
+      <div><label class="f" for="w-est">Established, year</label><input class="f" id="w-est" inputmode="numeric" placeholder="2021"></div>
+      <div><label class="f" for="w-area">Area / mall</label><input class="f" id="w-area" placeholder="e.g. City Walk"></div>
+      <div><label class="f" for="w-site">Company website</label><input class="f" id="w-site" type="url" inputmode="url" placeholder="https://petitparadis.ae" value="${esc(W.data.site||'')}"></div>
+      <div><label class="f" for="w-soc">Instagram / social</label><input class="f" id="w-soc" placeholder="@petitparadis.ae"></div>
+      <div class="full">
+        <label class="f">Company logo <span class="req">Required</span></label>
+        <div class="logobox">
+          <span class="lprev ${W.data.logo?'has':''}">${W.data.logo?'<img src="assets/petit-paradis/logo.png" alt="" onerror="this.parentElement.classList.remove(\'has\');this.replaceWith(document.createTextNode(\'LOGO\'))">':'LOGO'}</span>
+          <div>
+            <button class="btn btn-d btn-sm" type="button" data-add="logo">${W.data.logo?'Replace logo':'Upload logo'}${ic()}</button>
+            <p class="lrule">PNG or SVG with a transparent background. It has to fit a rectangle: aspect ratio between 1:1 and 4:1, at least 400 × 400 px for a square mark or 1200 × 400 px for a horizontal one, up to 2 MB. We scale it down to fit the frame — nothing is cropped.</p>
+          </div>
+        </div>
+      </div>
+      <div class="full"><label class="f" for="w-tag">One-line pitch</label><input class="f" id="w-tag" maxlength="120" placeholder="What a buyer should understand in five seconds" value="${esc(W.data.tag||'')}"></div>
+    </div></div>
+    <div class="wnav"><button class="btn btn-o" id="wback">Back</button><button class="btn btn-b btn-lg" id="wnext">Continue${ic()}</button></div>`;
+  if(W.step===2){
+    const sale=W.type==='sale';
+    const saleForm=`
+      <div><label class="f">Asking price (AED)</label><input class="f" placeholder="3,500,000"></div>
+      <div><label class="f">Deal structure</label><select class="f">${['100% share sale','Partial sale, %','Asset sale'].map(o=>`<option>${o}</option>`).join('')}</select></div>
+      <div><label class="f">Revenue, last 12 months (AED)</label><input class="f" placeholder="2,400,000"></div>
+      <div><label class="f">Net profit / EBITDA, last 12 months (AED)</label><input class="f" placeholder="1,200,000"></div>
+      <div><label class="f">Team size</label><input class="f" inputmode="numeric" placeholder="6"></div>
+      <div><label class="f">Owner involvement</label><select class="f"><option>Manager-run</option><option>Owner-run</option><option>Semi-absentee</option></select></div>
+      <div><label class="f">Premises</label><select class="f"><option>Leased</option><option>Owned</option><option>No premises</option></select></div>
+      <div><label class="f">Reason for sale</label><select class="f"><option>New project</option><option>Relocation</option><option>Portfolio exit</option><option>Partnership dissolution</option><option>Other</option></select></div>
+      <div class="full"><label class="f">What is included</label>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:13.5px;color:var(--tx)">${['Licence','Fit-out & equipment','Brand & socials','Team','Customer base','Supplier contracts'].map(c=>`<label class="chk" style="align-items:center;color:var(--tx)"><input type="checkbox" checked> ${c}</label>`).join('')}</div></div>`;
+    const raiseForm=`
+      <div><label class="f">Instrument</label><select class="f">${['Equity','SAFE','Loan / fixed income','Profit share'].map(o=>`<option>${o}</option>`).join('')}</select></div>
+      <div><label class="f">Round size (AED or USD)</label><input class="f" placeholder="5,000,000"></div>
+      <div><label class="f">Valuation, post-money (or rate for debt)</label><input class="f" placeholder="12,500,000 / 12% p.a."></div>
+      <div><label class="f">Equity offered, %</label><input class="f" placeholder="40"></div>
+      <div><label class="f">Minimum ticket</label><input class="f" placeholder="500,000"></div>
+      <div><label class="f">Stage</label><select class="f"><option>Operating</option><option>Growth</option><option>Pre-launch</option></select></div>
+      <div><label class="f">Current annual revenue</label><input class="f" placeholder="7,500,000"></div>
+      <div><label class="f">Exit / return horizon</label><input class="f" placeholder="e.g. dividends from year 2, exit in 4 years"></div>
+      <div class="full"><label class="f">Use of funds</label><input class="f" placeholder="e.g. fit-out 40%, marketing 35%, working capital 25%"></div>
+      <div class="full"><label class="f">Documents you can share after NDA</label>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:13.5px">${['Pitch deck','Financial model','Audited financials','Legal pack'].map(c=>`<label class="chk" style="align-items:center;color:var(--tx)"><input type="checkbox"> ${c}</label>`).join('')}</div></div>`;
+    return `
+    <p class="eyebrow">Create a listing · step 3 of 5</p>
+    <h2 class="wtitle">The numbers</h2>${wizBar()}
+    <div class="wcard"><div class="fgrid">
+      ${sale?saleForm:raiseForm}
+      <div class="full"><label class="f">Key highlights, one per line (max 5)</label><textarea class="f" rows="4" placeholder="Breakeven from day one&#10;Manager-run, team stays&#10;Prime location"></textarea></div>
+    </div>
+    <p class="note">These fields are the standard card: every deal on OKKO CAP shows the same facts in the same order. Numbers are reviewed at moderation; projections are always shown as the seller’s own.</p></div>
+    <div class="wnav"><button class="btn btn-o" id="wback">Back</button><button class="btn btn-b btn-lg" id="wnext">Continue${ic()}</button></div>`;
+  }
+  if(W.step===3){
+    const slot=(k,d)=>`<div class="uslot" data-u="${k}">
+      <div class="uhead">
+        <div><b>${d.t}</b><span>${d.s}</span></div>
+        <span class="gate ${d.g==='open'?'open':''}" data-g="${k}">${GATES[d.g]}</span>
+      </div>
+      <div class="ufiles">${(W.files[k]||[]).map((f,i)=>`<span class="ufile"><i>${f.ext}</i>${f.name}<button type="button" class="rm" data-k="${k}" data-i="${i}" aria-label="Remove">×</button></span>`).join('')||'<span class="uempty">No files yet</span>'}</div>
+      <div class="uacts">
+        <button class="btn btn-o btn-sm" type="button" data-add="${k}">Add file${ic()}</button>
+        <label class="f" style="margin:0 0 0 auto;display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12.5px">Who can open it
+          <select class="stx" data-gate="${k}">${Object.entries(GATES).map(([g,l])=>`<option value="${g}" ${d.g===g?'selected':''}>${l}</option>`).join('')}</select></label>
+      </div>
+    </div>`;
+    return `
+    <p class="eyebrow">Create a listing · step 4 of 5</p>
+    <h2 class="wtitle">Media and documents</h2>${wizBar()}
+    <div class="wcard">
+      <div class="drop req" style="margin-bottom:14px"><b>Video walkthrough — required.</b><br>A one-minute vertical video of your business, shot on a phone is fine. It becomes your listing cover.<br><br><button class="btn btn-d btn-sm" type="button" style="margin:0 auto" data-add="video">Upload video${ic()}</button></div>
+      <div class="drop" style="margin-bottom:26px"><b>Photos.</b> Drag up to 12 photos here, or <button class="btn btn-o btn-sm" type="button" style="display:inline-flex;vertical-align:middle" data-add="photos">browse${ic()}</button></div>
+
+      <h3 style="font-size:18px;margin-bottom:6px">Documents</h3>
+      <p class="note" style="margin:0 0 16px">Attach them by purpose — buyers see the same three blocks on your listing. Choose for each block who can open it: everyone, anyone who leaves their contacts, or only buyers who signed the NDA.</p>
+      ${Object.entries(W.docs).map(([k,d])=>slot(k,d)).join('')}
+      <p class="note">PDF, PPTX, XLSX or DOCX up to 50 MB per file. Files marked “After contacts” unlock the moment a buyer submits the enquiry form — you get their name, email and phone in the console at the same moment.</p>
+    </div>
+    <div class="wnav"><button class="btn btn-o" id="wback">Back</button><button class="btn btn-b btn-lg" id="wnext">Continue${ic()}</button></div>`;
+  }
+  if(W.step===4){
+    const three=W.plan==='3m';
+    const price=three?999:499, vat=Math.round(price*5)/100, total=(price+vat).toFixed(2);
+    return `
+    <p class="eyebrow">Create a listing · step 5 of 5</p>
+    <h2 class="wtitle">Package and payment</h2>${wizBar()}
+    <div class="wcard">
+      <p style="font-size:15px"><b>${esc(W.data.name||'Your listing')}</b> · ${W.type==='sale'?'Business for sale':'Raising capital'} · ${esc(W.data.loc||'UAE')}</p>
+      <div class="plans">
+        <button class="plan ${three?'':'on'}" data-p="1m"><span class="pl">1 month</span><div class="pp num">AED 499</div><p style="font-size:13px;color:var(--mut)">Renews monthly, cancel any time</p></button>
+        <button class="plan ${three?'on':''}" data-p="3m"><span class="save">SAVE 33%</span><span class="pl">3 months</span><div class="pp num">AED 999</div><p style="font-size:13px;color:var(--mut)">AED 333 a month, one payment</p></button>
+      </div>
+      <div class="paybox">
+        <div class="row"><span>Marketplace listing, ${three?'3 months':'1 month'}</span><b class="num">AED ${price.toFixed(2)}</b></div>
+        <div class="row"><span>VAT 5%</span><b class="num">AED ${vat.toFixed(2)}</b></div>
+        <div class="row t"><span>Due today</span><b class="num">AED ${total}</b></div>
+      </div>
+      <div class="fgrid" style="margin-top:20px">
+        <div class="full"><label class="f">Card number</label><input class="f" inputmode="numeric" placeholder="4242 4242 4242 4242"></div>
+        <div><label class="f">Expiry</label><input class="f" placeholder="12/28"></div>
+        <div><label class="f">CVC</label><input class="f" placeholder="123"></div>
+      </div>
+      <p class="note">Secured by Stripe. This is your listing fee only: OKKO CAP never takes buyer or investor money and charges no commission on the deal. Your listing goes to moderation immediately after payment and is typically live within 24 hours.</p>
+    </div>
+    <div class="wnav"><button class="btn btn-o" id="wback">Back</button><button class="btn btn-b btn-lg" id="wnext">Pay AED ${total} and publish${ic()}</button></div>`;
+  }
+  return `<div class="done">
+    <div class="ok">✓</div>
+    <h1>Listing submitted</h1>
+    <p>Payment received. <b>${esc(W.data.name||'Your listing')}</b> is now in moderation. We check the numbers, tidy the presentation and take it live, usually within 24 hours. You will get an email the moment it is published.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><a class="btn btn-d btn-lg" href="#/account">Go to dashboard${ic()}</a><a class="btn btn-o btn-lg" href="#/market">Browse the catalog${ic()}</a></div>
+  </div>`;
+}
+const DEMO_FILES={
+  deck:[{ext:'PDF',name:'Pitch deck 2026.pdf'},{ext:'PPTX',name:'Investor presentation.pptx'}],
+  fin:[{ext:'XLSX',name:'P&L 2025 by month.xlsx'},{ext:'XLSX',name:'Financial model 2026–2029.xlsx'},{ext:'PDF',name:'Bank statement H1 2026.pdf'}],
+  legal:[{ext:'PDF',name:'Trade licence.pdf'},{ext:'PDF',name:'Lease agreement.pdf'}]
+};
+function bindWiz(){
+  const w=$('#wiz'); if(!w)return;
+  w.querySelectorAll('.pick button').forEach(b=>b.onclick=()=>{W.type=b.dataset.w;w.innerHTML=wizStep();bindWiz();});
+  w.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{
+    const k=b.dataset.add;
+    if(k==='logo'){W.data.logo=!W.data.logo;w.innerHTML=wizStep();bindWiz();return;}
+    if(k==='video'||k==='photos'){alert('File picker — prototype');return;}
+    const pool=DEMO_FILES[k]||[]; const cur=W.files[k]||[];
+    const next=pool[cur.length%pool.length];
+    W.files[k]=[...cur,next];
+    w.innerHTML=wizStep();bindWiz();
+  });
+  w.querySelectorAll('.rm').forEach(b=>b.onclick=()=>{
+    W.files[b.dataset.k].splice(+b.dataset.i,1);w.innerHTML=wizStep();bindWiz();
+  });
+  w.querySelectorAll('[data-gate]').forEach(s=>s.onchange=()=>{
+    W.docs[s.dataset.gate].g=s.value;w.innerHTML=wizStep();bindWiz();
+  });
+  w.querySelectorAll('.plan').forEach(b=>b.onclick=()=>{W.plan=b.dataset.p;w.innerHTML=wizStep();bindWiz();});
+  const nx=$('#wnext'),bk=$('#wback');
+  if(nx)nx.onclick=()=>{
+    if(W.step===1){const n=$('#w-name'),lo=$('#w-loc'),tg=$('#w-tag'),si=$('#w-site');W.data.name=n?n.value:'';W.data.loc=lo?lo.value:'';W.data.tag=tg?tg.value:'';W.data.site=si?si.value:'';}
+    W.step++;w.innerHTML=wizStep();bindWiz();window.scrollTo({top:0,behavior:'instant'});
+  };
+  if(bk)bk.onclick=()=>{W.step--;w.innerHTML=wizStep();bindWiz();window.scrollTo({top:0,behavior:'instant'});};
+}
+
+/* =============== LOGIN =============== */
+function loginPage(){
+  return `
+  <section class="auth">
+    <div class="grid-bg"></div><div class="glow"></div>
+    <div class="authbox">
+      <p class="eyebrow">Seller console</p>
+      <h1>Sign in</h1>
+      <p class="sub">Track views, enquiries and the status of every listing you run on OKKO CAP.</p>
+      <form class="authcard" onsubmit="event.preventDefault();location.hash='#/account'">
+        <div><label class="f" for="li-e">Email</label><input class="f" id="li-e" type="email" required placeholder="owner@business.com"></div>
+        <div><label class="f" for="li-p">Password</label><input class="f" id="li-p" type="password" required placeholder="••••••••"></div>
+        <button class="btn btn-b btn-lg full" type="submit">Sign in${ic()}</button>
+      </form>
+      <p class="note">No account yet? It is created when you <a href="#/list" class="lnk">publish your first listing</a>.</p>
+    </div>
+  </section>`;
+}
+
+/* =============== SELLER CONSOLE =============== */
+const ENQ_ST={
+  new:{l:'New',c:'st-new'}, replied:{l:'Replied',c:'st-rep'}, ndasent:{l:'NDA sent',c:'st-rep'},
+  nda:{l:'NDA signed',c:'st-nda'}, viewing:{l:'Viewing booked',c:'st-view'}, loi:{l:'LOI',c:'st-loi'}, lost:{l:'Lost',c:'st-lost'}
+};
+const TPL=[
+  ['Ask for budget & timeline','Thank you for the interest in Petit Paradis. Could you share your budget range and the timeline you are working to? I will then send the numbers that matter most for your case.'],
+  ['Send the numbers','Happy to share more. Revenue is running at AED 2.4M a year with EBITDA around AED 1.2M. The full P&L by month is in the data room — sign the NDA and it opens automatically.'],
+  ['Propose a call','Would a 20-minute call this week work? I can walk you through the numbers and the handover plan, then we can arrange a site visit.']
+];
+const SLOTS=['Thu, Aug 19 · 11:00','Thu, Aug 19 · 16:30','Sat, Aug 21 · 10:00'];
+const ENQ=[
+  {id:'e1',name:'Sword House Ltd',who:'Family office · Dubai',listing:'Petit Paradis',ch:'Email',date:'Aug 16',ago:'2 h ago',st:'viewing',score:3,ticket:'AED 3–5M',horizon:'Ready to move in 30 days',nda:'Signed Aug 15',
+   mail:'sales@swordhouse.ae',phone:'+971 50 118 4417',shared:true,
+   thread:[['buyer','Aug 16 · 09:12','We are reviewing three kids-entertainment assets in Dubai and Petit Paradis is our first choice. Could we book a site visit this week and receive the POS export for the last 6 months?'],
+     ['you','Aug 16 · 10:40','Thank you — the POS export is in the data room. Would Thursday 11:00 work for a visit?'],
+     ['sys','Aug 16 · 10:41','Viewing proposed: Thu, Aug 19 · 11:00 — accepted by the buyer']]},
+  {id:'e2',name:'Ahmed R.',who:'Private buyer · Abu Dhabi',listing:'Petit Paradis',ch:'WhatsApp',date:'Aug 16',ago:'5 h ago',st:'new',score:2,ticket:'Up to AED 4M',horizon:'Exploring, 3–6 months',nda:'Not sent',
+   mail:'ahmed.r@gmail.com',phone:'+971 55 902 1330',shared:false,
+   thread:[['buyer','Aug 16 · 06:20','Is the asking price negotiable if we close quickly? Also, does the manager stay on after the sale?']]},
+  {id:'e3',name:'Priya S.',who:'Investor · Dubai',listing:'Petit Paradis',ch:'Form',date:'Aug 15',ago:'1 day ago',st:'nda',score:3,ticket:'AED 3.5M',horizon:'Cash, no financing',nda:'Signed Aug 15',
+   mail:'priya@sharma.co',phone:'+971 52 778 8140',shared:true,
+   thread:[['buyer','Aug 15 · 12:02','Please give me access to the presentation and financials.'],
+     ['sys','Aug 15 · 12:03','Contacts left — presentation and financials unlocked automatically'],
+     ['sys','Aug 15 · 16:30','NDA signed — full data room access granted'],
+     ['buyer','Aug 15 · 16:35','NDA signed. Please share the lease agreement and the membership base breakdown.']]},
+  {id:'e4',name:'Omar K.',who:'Operator · Sharjah',listing:'Petit Paradis',ch:'Form',date:'Aug 12',ago:'4 days ago',st:'replied',score:2,ticket:'AED 2–3M',horizon:'Needs bank financing',nda:'Not sent',
+   mail:'omar@kalbaholding.ae',phone:'+971 56 312 0044',shared:false,
+   thread:[['buyer','Aug 12 · 08:15','I run two nurseries in Sharjah and I am looking to add a play venue. What is the rent and how many years are left on the lease?'],
+     ['you','Aug 12 · 09:00','Rent is 26% of revenue with four years left on the lease, renewable. Happy to walk you through the numbers.']]},
+  {id:'e5',name:'Elena V.',who:'Private buyer · Dubai',listing:'Petit Paradis',ch:'Form',date:'Aug 10',ago:'6 days ago',st:'lost',score:1,ticket:'Under AED 1M',horizon:'Budget mismatch',nda:'Not sent',
+   mail:'elena.v@outlook.com',phone:'+971 54 660 2211',shared:false,
+   thread:[['buyer','Aug 10 · 19:40','Beautiful venue, but our budget is well below the asking price. Please keep me in mind for smaller assets.']]},
+  {id:'e6',name:'Gulf Leisure Group',who:'Strategic · Riyadh',listing:'Petit Paradis',ch:'Email',date:'Aug 8',ago:'8 days ago',st:'loi',score:3,ticket:'AED 3.5M',horizon:'LOI signed, DD running',nda:'Signed Aug 6',
+   mail:'m.alharbi@gulfleisure.sa',phone:'+966 55 410 7788',shared:true,
+   thread:[['buyer','Aug 5 · 11:00','We would like to move quickly. Can you send the teaser and the last 12 months of revenue?'],
+     ['sys','Aug 6 · 14:20','NDA signed — full data room access granted'],
+     ['sys','Aug 8 · 17:05','LOI signed — due diligence started'],
+     ['buyer','Aug 16 · 09:30','Our DD team will need the ERP access and supplier contracts by the end of next week.']]}
+];
+const MY_LISTINGS=[
+  {id:'petit-paradis',name:'Petit Paradis',loc:'City Walk, Dubai',type:'For sale',st:'live',stl:'Live',views:1112,enq:31,ctr:'2.8%',pub:'Published Aug 1',exp:'Renews Sep 1',fill:100,note:''},
+  {id:null,name:'Petit Paradis · second location',loc:'Dubai Hills, Dubai',type:'Raising',st:'mod',stl:'In moderation',views:0,enq:0,ctr:'—',pub:'Submitted Aug 16',exp:'Review within 24 h',fill:85,
+   note:'Moderator: add the 12-month P&L and confirm the equity split before we can publish.'},
+  {id:null,name:'Old concept teaser',loc:'Not specified',type:'—',st:'dr',stl:'Draft',views:0,enq:0,ctr:'—',pub:'Started Jul 22',exp:'Not submitted',fill:35,note:''}
+];
+const VIEWS=[18,24,21,30,27,35,41,38,44,52,47,55,61,58,49,63,71,66,74,80,72,68,77,85,79,91,88,96,104,112];
+const SOURCES=[['Marketplace search',42],['OKKO newsletter',21],['Direct link',18],['Home ticker',11],['Referral',8]];
+const ACTIVITY=[
+  ['Aug 16','<b>Sword House Ltd</b> requested a viewing for Aug 19'],
+  ['Aug 16','<b>Ahmed R.</b> sent a new enquiry via WhatsApp'],
+  ['Aug 15','<b>Priya S.</b> signed the NDA — data room access granted'],
+  ['Aug 14','Listing <b>Petit Paradis</b> passed 1,000 views'],
+  ['Aug 12','Moderation comment on <b>second location</b>'],
+  ['Aug 8','<b>Gulf Leisure Group</b> signed an LOI']
+];
+const DOC_CATS=[
+  {k:'deck',t:'Presentation',s:'Teaser, pitch deck, investor presentation',files:[
+    ['PDF','Teaser — Petit Paradis.pdf','1.2 MB · updated Aug 1','open',48],
+    ['PPTX','Full presentation.pptx','8.4 MB · updated Aug 12','contacts',22]]},
+  {k:'fin',t:'Financial documents',s:'P&L, model, bank and POS statements',files:[
+    ['XLSX','P&L 2025 by month.xlsx','340 KB · updated Aug 14','contacts',19],
+    ['XLSX','Revenue & cost breakdown.xlsx','620 KB · updated Aug 14','contacts',17]]},
+  {k:'legal',t:'Legal & licence',s:'Trade licence, lease, corporate documents',files:[
+    ['PDF','Trade licence & lease.pdf','2.8 MB · updated Aug 1','nda',9],
+    ['PDF','Data room index.pdf','180 KB · updated Aug 15','nda',9]]},
+  {k:'media',t:'Media',s:'Video walkthrough and photos',files:[
+    ['MP4','Video walkthrough 1:12','58 MB · updated Aug 1','open',311]]}
+];
+const LEADS=[
+  ['Sword House Ltd','sales@swordhouse.ae','+971 50 ··· 4417','Aug 16','Presentation, Financials'],
+  ['Ahmed R.','ahmed.r@gmail.com','+971 55 ··· 9021','Aug 16','Presentation'],
+  ['Priya S.','priya@sharma.co','+971 52 ··· 7788','Aug 15','Presentation, Financials'],
+  ['Omar K.','omar@kalbaholding.ae','+971 56 ··· 3120','Aug 12','Presentation']
+];
+const INVOICES=[['INV-2026-0812','Aug 1, 2026','Marketplace listing · 1 month','AED 523.95','Paid'],
+  ['INV-2026-0714','Jul 1, 2026','Marketplace listing · 1 month','AED 523.95','Paid'],
+  ['INV-2026-0616','Jun 1, 2026','Marketplace listing · 1 month','AED 523.95','Paid']];
+const ACC={tab:'overview',f:'all',open:null};
+const TABS=[['overview','Overview',''],['enquiries','Enquiries','2'],['listings','Listings',''],['analytics','Analytics',''],
+  ['documents','Documents',''],['billing','Billing',''],['settings','Settings','']];
+
+function sparkline(data,w,h){
+  const max=Math.max(...data),min=Math.min(...data),n=data.length;
+  const x=i=>(i/(n-1))*w, y=v=>h-((v-min)/(max-min))*(h-14)-7;
+  const line=data.map((v,i)=>`${i?'L':'M'}${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join(' ');
+  const area=`${line} L${w} ${h} L0 ${h} Z`;
+  return `<svg class="chart" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" role="img" aria-label="Views, last 30 days">
+    <defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2447E6" stop-opacity=".22"/><stop offset="1" stop-color="#2447E6" stop-opacity="0"/></linearGradient></defs>
+    ${[0,1,2,3].map(i=>`<line class="gl" x1="0" y1="${(h/4*i+7).toFixed(0)}" x2="${w}" y2="${(h/4*i+7).toFixed(0)}" stroke-width="1"/>`).join('')}
+    <path d="${area}" fill="url(#g1)"/>
+    <path d="${line}" fill="none" stroke="#2447E6" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${w}" cy="${y(data[n-1]).toFixed(1)}" r="4.5" fill="#2447E6"/>
+  </svg>`;
+}
+function funnelHTML(){
+  const rows=[['Listing views',1284,1],['Card opens',412,.32],['Enquiries',37,.029],['NDAs signed',9,.007],['Viewings',4,.003],['LOI',1,.0008]];
+  const max=rows[0][1];
+  return `<div class="funnel">${rows.map((r,i)=>`<div class="fstep">
+    <span class="lb">${r[0]}</span>
+    <span class="bar"><i class="${i>2?'dim':''}" style="width:${Math.max(r[1]/max*100,2)}%"></i></span>
+    <span class="v num">${r[1].toLocaleString('en-US')}</span></div>`).join('')}</div>
+  <p class="note">Conversion view → enquiry <b>2.9%</b>, enquiry → NDA <b>24%</b>. Category median on OKKO CAP: 2.1% and 19%.</p>`;
+}
+function stPill(k){const s=ENQ_ST[k];return `<span class="st ${s.c}">${s.l}</span>`;}
+function score(n){return `<span class="qs" title="Buyer quality">${[1,2,3].map(i=>`<i class="${i<=n?'on':''}"></i>`).join('')}</span>`;}
+
+function accountPage(){
+  return `
+  <div class="phead" style="padding-bottom:44px"><div class="grid-bg"></div><div class="glow"></div><div class="wrap">
+    <p class="eyebrow">Seller console · Petit Paradis FZ-LLC</p>
+    <div class="row">
+      <div><h1>Good afternoon, Maria</h1>
+        <p class="sub" style="max-width:52ch">One listing live, 2 enquiries waiting for a reply and an LOI in due diligence.</p></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn btn-gh" href="#/deal/petit-paradis">View my listing${ic()}</a>
+        <a class="btn btn-w" href="#/list">New listing${ic()}</a>
+      </div>
+    </div>
+  </div></div>
+  <div class="wrap console">
+    <aside class="side">
+      <p class="sh">Deal desk</p>
+      ${TABS.slice(0,4).map(t=>`<a href="#/account/${t[0]}" class="${ACC.tab===t[0]?'on':''}">${t[1]}${t[2]?`<span class="cnt">${t[2]}</span>`:''}</a>`).join('')}
+      <p class="sh">Account</p>
+      ${TABS.slice(4).map(t=>`<a href="#/account/${t[0]}" class="${ACC.tab===t[0]?'on':''}">${t[1]}</a>`).join('')}
+    </aside>
+    <div id="accbody">${accBody()}</div>
+  </div>`;
+}
+function accBody(){
+  const t=ACC.tab;
+  if(t==='enquiries')return enqTab();
+  if(t==='listings')return listingsTab();
+  if(t==='analytics')return analyticsTab();
+  if(t==='documents')return docsTab();
+  if(t==='billing')return billingTab();
+  if(t==='settings')return settingsTab();
+  return overviewTab();
+}
+function overviewTab(){
+  return `
+  <div class="kpis">
+    <div class="kpi d"><b class="num">1,284</b><span>Views · 30 days</span><div class="delta">▲ 18% vs prior 30</div></div>
+    <div class="kpi"><b class="num">37</b><span>Enquiries</span><div class="delta">▲ 6 this week</div></div>
+    <div class="kpi"><b class="num">2.9%</b><span>View → enquiry</span><div class="delta">Median 2.1%</div></div>
+    <div class="kpi"><b class="num">9</b><span>NDAs signed</span><div class="delta dn">▼ 2 vs prior 30</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="ph"><div><h3>Needs your attention</h3><p class="sub">Ranked by how much it costs you to ignore it.</p></div></div>
+    <div class="todo">
+      <a href="#/account/enquiries"><span class="ti b">!</span><span><b>2 enquiries unanswered for over 24 hours</b><span>Ahmed R. and Omar K. — buyers who wait more than a day reply half as often.</span></span><span class="go">${ARR}</span></a>
+      <a href="#/account/listings"><span class="ti g">✎</span><span><b>Moderation comment on “second location”</b><span>Add the 12-month P&L and confirm the equity split to go live.</span></span><span class="go">${ARR}</span></a>
+      <a href="#/account/documents"><span class="ti n">↑</span><span><b>Gulf Leisure Group is in due diligence</b><span>ERP access and supplier contracts requested for next week.</span></span><span class="go">${ARR}</span></a>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="ph"><div><h3>Views, last 30 days</h3><p class="sub">Petit Paradis · all sources</p></div>
+      <a class="btn btn-o btn-sm" href="#/account/analytics">Full analytics${ic()}</a></div>
+    ${sparkline(VIEWS,760,190)}
+    <div class="legend"><span><i style="background:#2447E6"></i>Listing views</span><span>Peak Aug 14 · 112 views after the newsletter</span></div>
+  </div>
+
+  <div class="panel">
+    <div class="ph"><div><h3>Deal funnel</h3><p class="sub">From impression to signed LOI</p></div></div>
+    ${funnelHTML()}
+  </div>
+
+  <div class="panel">
+    <div class="ph"><div><h3>Recent activity</h3></div></div>
+    <div class="tl">${ACTIVITY.map(a=>`<div><time>${a[0]}</time><span>${a[1]}</span></div>`).join('')}</div>
+  </div>`;
+}
+function enqTab(){
+  const list = ACC.f==='all'?ENQ:ENQ.filter(e=>e.st===ACC.f);
+  const counts=k=>k==='all'?ENQ.length:ENQ.filter(e=>e.st===k).length;
+  return `
+  <div class="panel">
+    <div class="ph"><div><h3>Enquiries</h3><p class="sub">Every enquiry also lands in your email and WhatsApp. Reply within 24 hours to double your response rate.</p></div>
+      <button class="btn btn-o btn-sm" onclick="alert('Export CSV — prototype')">Export CSV${ic()}</button></div>
+    <div class="stfilter">
+      <button data-f="all" class="${ACC.f==='all'?'on':''}">All · ${counts('all')}</button>
+      ${Object.entries(ENQ_ST).map(([k,v])=>`<button data-f="${k}" class="${ACC.f===k?'on':''}">${v.l} · ${counts(k)}</button>`).join('')}
+    </div>
+    <div class="tblwrap" style="border:0"><table class="lst">
+      <tr><th>Buyer</th><th>Quality</th><th>Ticket</th><th>Channel</th><th>Received</th><th>Status</th></tr>
+      ${list.map(e=>`<tr class="erow" data-e="${e.id}">
+        <td><b>${e.name}</b><br><span style="color:var(--mut);font-size:13px">${e.who}</span></td>
+        <td>${score(e.score)}</td><td>${e.ticket}</td><td>${e.ch}</td>
+        <td>${e.date}<br><span style="color:var(--mut);font-size:12.5px">${e.ago}</span></td>
+        <td>${stPill(e.st)}</td></tr>`).join('')||'<tr><td colspan="6" style="color:var(--mut)">No enquiries with this status.</td></tr>'}
+    </table></div>
+  </div>
+  <p class="note">Quality is scored by OKKO CAP from the buyer’s stated ticket, timeline and history on the platform. It is guidance, not a guarantee.</p>`;
+}
+function listingsTab(){
+  return `
+  <div class="panel">
+    <div class="ph"><div><h3>My listings</h3><p class="sub">A listing stays live while the subscription is active. Pause it any time — the data stays.</p></div>
+      <a class="btn btn-d btn-sm" href="#/list">New listing${ic()}</a></div>
+    ${MY_LISTINGS.map(l=>`<div class="lrow">
+      <div class="th">${l.id?photo(l.id,1,l.name):'<div style="width:100%;height:100%;background:var(--paper)"></div>'}</div>
+      <div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><h4>${l.name}</h4><span class="st st-${l.st}">${l.stl}</span></div>
+        <span style="color:var(--mut);font-size:13.5px">${l.loc} · ${l.type}</span>
+        <div class="meta"><span>${l.pub}</span><span>${l.exp}</span><span>Views <b>${l.views||'—'}</b></span><span>Enquiries <b>${l.enq||'—'}</b></span><span>View → enquiry <b>${l.ctr}</b></span></div>
+        ${l.fill<100?`<div class="bar-mini"><i style="width:${l.fill}%"></i></div><span style="font-size:12.5px;color:var(--mut)">Listing completeness ${l.fill}%</span>`:''}
+        ${l.note?`<p class="note" style="margin-top:10px;color:#8A6A20">${l.note}</p>`:''}
+      </div>
+      <div class="acts">
+        ${l.id?`<a class="btn btn-o btn-sm" href="#/deal/${l.id}">View${ic()}</a>`:''}
+        <a class="btn btn-o btn-sm" href="#/list">Edit${ic()}</a>
+        ${l.st==='live'?'<button class="btn btn-o btn-sm" onclick="alert(\'Listing paused — prototype\')">Pause</button>':''}
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+function analyticsTab(){
+  return `
+  <div class="kpis">
+    <div class="kpi"><b class="num">1,284</b><span>Views · 30 days</span></div>
+    <div class="kpi"><b class="num">412</b><span>Card opens</span></div>
+    <div class="kpi"><b class="num">1:48</b><span>Avg. time on listing</span></div>
+    <div class="kpi"><b class="num">68%</b><span>Video watched</span></div>
+  </div>
+  <div class="panel">
+    <div class="ph"><div><h3>Views over time</h3><p class="sub">Daily, last 30 days</p></div></div>
+    ${sparkline(VIEWS,760,190)}
+  </div>
+  <div class="panel">
+    <div class="ph"><div><h3>Where buyers come from</h3></div></div>
+    <div class="srcs">${SOURCES.map(s=>`<div class="src"><div><span>${s[0]}</span><div class="tr"><i style="width:${s[1]}%"></i></div></div><span class="pc num">${s[1]}%</span></div>`).join('')}</div>
+  </div>
+  <div class="panel">
+    <div class="ph"><div><h3>Funnel</h3></div></div>
+    ${funnelHTML()}
+  </div>
+  <div class="panel panel-d">
+    <div class="ph"><div><h3 style="color:#fff">How you compare</h3><p class="sub">Kids &amp; Family · asking price AED 2–5M · last 30 days</p></div></div>
+    <div class="tl" style="color:rgba(255,255,255,.8)">
+      <div style="border-color:rgba(255,255,255,.1)"><time style="color:var(--mut-d);width:130px">Views</time><span>1,284 — <b>top 20%</b> of the category</span></div>
+      <div style="border-color:rgba(255,255,255,.1)"><time style="color:var(--mut-d);width:130px">View → enquiry</time><span>2.9% vs category median 2.1%</span></div>
+      <div style="border-color:rgba(255,255,255,.1)"><time style="color:var(--mut-d);width:130px">Reply time</time><span>14 h vs median 6 h — <b>slower than most</b></span></div>
+      <div><time style="color:var(--mut-d);width:130px">Days live</time><span>16 of a typical 74-day sale cycle</span></div>
+    </div>
+  </div>`;
+}
+function docsTab(){
+  return `
+  <div class="panel">
+    <div class="ph"><div><h3>Documents</h3><p class="sub">Attached by purpose. For every block you choose who can open it: everyone, anyone who leaves contacts, or only buyers who signed the NDA.</p></div>
+      <button class="btn btn-d btn-sm" onclick="alert('Upload — prototype')">Upload${ic()}</button></div>
+    ${DOC_CATS.map(c=>`
+      <div style="margin-bottom:22px">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:4px">
+          <div><b style="font-weight:500;font-size:15px">${c.t}</b><br><span class="dm">${c.s}</span></div>
+          <button class="btn btn-o btn-sm" onclick="alert('Add file — prototype')">Add file${ic()}</button>
+        </div>
+        ${c.files.map(d=>`<div class="docrow">
+          <span class="di">${d[0]}</span>
+          <span><b style="font-weight:500">${d[1]}</b><br><span class="dm">${d[2]} · ${d[4]} downloads</span></span>
+          <span class="sp"></span>
+          <select class="stx" aria-label="Access">${Object.entries(GATES).map(([g,l])=>`<option value="${g}" ${d[3]===g?'selected':''}>${l}</option>`).join('')}</select>
+          <a class="lnk" href="#" onclick="event.preventDefault()">Manage</a>
+        </div>`).join('')}
+      </div>`).join('')}
+  </div>
+
+  <div class="panel">
+    <div class="ph"><div><h3>Contacts collected by documents</h3><p class="sub">Everyone who unlocked the presentation or financials by leaving contacts. They land in Enquiries too.</p></div>
+      <button class="btn btn-o btn-sm" onclick="alert('Export CSV — prototype')">Export CSV${ic()}</button></div>
+    <div class="tblwrap" style="border:0"><table class="lst">
+      <tr><th>Person</th><th>Email</th><th>Phone</th><th>Date</th><th>Unlocked</th></tr>
+      ${LEADS.map(l=>`<tr><td><b>${l[0]}</b></td><td>${l[1]}</td><td>${l[2]}</td><td>${l[3]}</td><td>${l[4]}</td></tr>`).join('')}
+    </table></div>
+  </div>
+  <div class="panel">
+    <div class="ph"><div><h3>NDA &amp; access log</h3><p class="sub">Signed copies are stored here and sent to your email.</p></div></div>
+    <div class="tblwrap" style="border:0"><table class="lst">
+      <tr><th>Buyer</th><th>NDA</th><th>Data room</th><th>Last opened</th></tr>
+      <tr><td><b>Gulf Leisure Group</b></td><td>Signed Aug 6</td><td>Full access</td><td>Aug 16 · P&L 2025</td></tr>
+      <tr><td><b>Sword House Ltd</b></td><td>Signed Aug 15</td><td>Full access</td><td>Aug 16 · Teaser</td></tr>
+      <tr><td><b>Priya S.</b></td><td>Signed Aug 15</td><td>Full access</td><td>Aug 15 · Licence &amp; lease</td></tr>
+      <tr><td><b>Ahmed R.</b></td><td>Not sent</td><td>Public only</td><td>—</td></tr>
+    </table></div>
+  </div>`;
+}
+function billingTab(){
+  return `
+  <div class="kpis" style="grid-template-columns:repeat(3,1fr)">
+    <div class="kpi d"><b>AED 499</b><span>Current plan · 1 month</span></div>
+    <div class="kpi"><b>Sep 1</b><span>Next renewal</span></div>
+    <div class="kpi"><b>Visa ·· 4242</b><span>Payment method</span></div>
+  </div>
+  <div class="panel">
+    <div class="ph"><div><h3>Plan</h3><p class="sub">A flat listing fee. OKKO CAP takes no commission on the transaction and never holds buyer funds.</p></div></div>
+    <div class="plans" style="margin-top:0">
+      <button class="plan on"><span class="pl">1 month</span><div class="pp num">AED 499</div><p style="font-size:13px;color:var(--mut)">Current plan · renews Sep 1</p></button>
+      <button class="plan"><span class="save">SAVE 33%</span><span class="pl">3 months</span><div class="pp num">AED 999</div><p style="font-size:13px;color:var(--mut)">AED 333 a month, one payment</p></button>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+      <button class="btn btn-d btn-sm">Switch to 3 months${ic()}</button>
+      <button class="btn btn-o btn-sm">Update card${ic()}</button>
+      <button class="btn btn-o btn-sm">Cancel plan${ic()}</button>
+    </div>
+    <p class="note">Cancelling keeps the listing live until Sep 1, then moves it to drafts. Your enquiries and documents stay in the console.</p>
+  </div>
+  <div class="panel">
+    <div class="ph"><div><h3>Invoices</h3></div></div>
+    <div class="tblwrap" style="border:0"><table class="lst">
+      <tr><th>Invoice</th><th>Date</th><th>Description</th><th>Amount</th><th>Status</th><th></th></tr>
+      ${INVOICES.map(i=>`<tr><td><b>${i[0]}</b></td><td>${i[1]}</td><td>${i[2]}</td><td class="num">${i[3]}</td>
+        <td><span class="st st-live">${i[4]}</span></td><td><a class="lnk" href="#" onclick="event.preventDefault()">PDF</a></td></tr>`).join('')}
+    </table></div>
+  </div>`;
+}
+function settingsTab(){
+  return `
+  <div class="panel">
+    <div class="ph"><div><h3>Company &amp; contacts</h3><p class="sub">Buyers never see your email or phone — enquiries are routed through OKKO CAP.</p></div></div>
+    <div class="fgrid">
+      <div><label class="f">Contact name</label><input class="f" value="Maria Khoury"></div>
+      <div><label class="f">Role</label><input class="f" value="Owner"></div>
+      <div><label class="f">Legal entity</label><input class="f" value="Petit Paradis FZ-LLC"></div>
+      <div><label class="f">Trade licence</label><input class="f" value="CN-3948217"></div>
+      <div><label class="f">Email</label><input class="f" type="email" value="maria@petitparadis.ae"></div>
+      <div><label class="f">WhatsApp</label><input class="f" value="+971 50 118 4420"></div>
+    </div>
+    <div style="margin-top:20px"><button class="btn btn-d btn-sm">Save changes${ic()}</button></div>
+  </div>
+  <div class="panel">
+    <div class="ph"><div><h3>Notifications</h3><p class="sub">Where a new enquiry reaches you.</p></div></div>
+    <div class="swrow"><span><b>New enquiry — email</b><span>Instant, with the buyer’s message and quality score</span></span><span class="sp"></span><span class="sw on" role="switch" tabindex="0"></span></div>
+    <div class="swrow"><span><b>New enquiry — WhatsApp</b><span>Instant push to +971 50 118 4420</span></span><span class="sp"></span><span class="sw on" role="switch" tabindex="0"></span></div>
+    <div class="swrow"><span><b>NDA signed</b><span>When a buyer unlocks the data room</span></span><span class="sp"></span><span class="sw on" role="switch" tabindex="0"></span></div>
+    <div class="swrow"><span><b>Weekly performance digest</b><span>Views, enquiries and how you compare to the category</span></span><span class="sp"></span><span class="sw" role="switch" tabindex="0"></span></div>
+  </div>
+  <div class="panel">
+    <div class="ph"><div><h3>Team access</h3><p class="sub">Invite a partner or your accountant. Advisors from OKKO CAP appear here when you sign a mandate.</p></div>
+      <button class="btn btn-o btn-sm">Invite${ic()}</button></div>
+    <div class="tblwrap" style="border:0"><table class="lst">
+      <tr><th>Person</th><th>Access</th><th>Added</th><th></th></tr>
+      <tr><td><b>Maria Khoury</b><br><span style="color:var(--mut);font-size:13px">maria@petitparadis.ae</span></td><td>Owner · full</td><td>Aug 1</td><td></td></tr>
+      <tr><td><b>Karim N.</b><br><span style="color:var(--mut);font-size:13px">karim@petitparadis.ae</span></td><td>Manager · enquiries only</td><td>Aug 4</td><td><a class="lnk" href="#" onclick="event.preventDefault()">Remove</a></td></tr>
+    </table></div>
+  </div>
+  <div class="panel panel-d">
+    <div class="ph"><div><h3 style="color:#fff">Want the deal run for you?</h3><p class="sub">OKKO Capital takes retained sell-side mandates: packaging, paid buyer acquisition, negotiation to close.</p></div>
+      <a class="btn btn-w btn-sm" href="#/advisory">Talk to the team${ic()}</a></div>
+  </div>`;
+}
+function mask(s){return s.replace(/^(.{2}).*(@.*)$/,'$1···$2').replace(/^(\+\d{3} \d{2}) \d{3}/,'$1 ···');}
+function drawerHTML(e){
+  const bubble=m=>m[0]==='sys'
+    ? `<div class="msg-s"><span>${m[2]}</span><time>${m[1]}</time></div>`
+    : `<div class="mb ${m[0]==='you'?'you':'buyer'}"><div class="bub">${m[2]}</div><time>${m[0]==='you'?'You':e.name} · ${m[1]}</time></div>`;
+  return `
+    <button class="x" onclick="closeModal()" aria-label="Close">×</button>
+    <p class="eyebrow">${e.ch} · ${e.date}</p>
+    <h3>${e.name}</h3>
+    <p style="color:var(--mut);font-size:14px;margin-bottom:14px">${e.who}</p>
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:18px">${stPill(e.st)} ${score(e.score)}</div>
+
+    <div class="kv"><span>Listing</span><b>${e.listing}</b></div>
+    <div class="kv"><span>Stated ticket</span><b>${e.ticket}</b></div>
+    <div class="kv"><span>Timeline</span><b>${e.horizon}</b></div>
+    <div class="kv"><span>NDA</span><b>${e.nda}</b></div>
+    <div class="kv"><span>Email</span><b>${e.shared?e.mail:mask(e.mail)}</b></div>
+    <div class="kv"><span>Phone</span><b>${e.shared?e.phone:mask(e.phone)}</b></div>
+    ${e.shared?'':`<p class="note" style="margin:10px 0 0">Contacts stay masked until you reply — the conversation runs through OKKO CAP.
+      <button class="lnk" onclick="enqAct('${e.id}','reveal')" style="font-size:12.5px">Reveal contacts</button></p>`}
+
+    <h4 class="dsub">Conversation</h4>
+    <div class="thread">${e.thread.map(bubble).join('')}</div>
+
+    <div class="tpls">${TPL.map((t,i)=>`<button class="tpl" onclick="useTpl(${i})">${t[0]}</button>`).join('')}</div>
+    <textarea class="f" id="reply" rows="3" placeholder="Write a reply to ${e.name}…"></textarea>
+    <div class="acts">
+      <button class="btn btn-b full" onclick="enqAct('${e.id}','send')">Send reply${ic()}</button>
+      ${e.st==='nda'||e.st==='loi'?'':`<button class="btn btn-o full" onclick="enqAct('${e.id}','nda')">Send the NDA${ic()}</button>`}
+      <button class="btn btn-o full" onclick="enqAct('${e.id}','slots')">Propose a viewing${ic()}</button>
+      <div id="slots"></div>
+      <button class="btn btn-o full" onclick="enqAct('${e.id}','loi')">Mark as LOI signed${ic()}</button>
+      <button class="btn btn-o full" onclick="enqAct('${e.id}','lost')">Mark as lost${ic()}</button>
+    </div>
+    <label class="f" style="margin-top:20px">Status</label>
+    <select class="f" onchange="setEnqSt('${e.id}',this.value)">${Object.entries(ENQ_ST).map(([k,v])=>`<option value="${k}" ${k===e.st?'selected':''}>${v.l}</option>`).join('')}</select>
+    <p class="note">Replies are delivered by email and WhatsApp from a masked OKKO CAP address, and a copy stays here. Every action is logged in the deal history.</p>`;
+}
+function openEnq(id){
+  const e=ENQ.find(x=>x.id===id); if(!e)return;
+  $('#mroot').innerHTML=`<div class="drawer" onclick="if(event.target===this)closeModal()">
+    <div class="dr" id="drw" role="dialog" aria-modal="true" aria-label="Enquiry">${drawerHTML(e)}</div></div>`;
+  document.addEventListener('keydown',escClose);
+}
+function redrawEnq(e){
+  const d=$('#drw'); if(d){d.innerHTML=drawerHTML(e);d.scrollTop=0;}
+  const b=$('#accbody'); if(b){b.innerHTML=accBody();bindAcc();}
+}
+function useTpl(i){const t=$('#reply'); if(t){t.value=TPL[i][1];t.focus();}}
+function enqAct(id,what,arg){
+  const e=ENQ.find(x=>x.id===id); if(!e)return;
+  const now='Aug 16 · '+(['14:05','14:22','15:10','16:04'][e.thread.length%4]);
+  if(what==='send'){
+    const t=$('#reply'), v=t?t.value.trim():'';
+    if(!v){t&&t.focus();return;}
+    e.thread.push(['you',now,v]);
+    if(e.st==='new')e.st='replied';
+    e.shared=true;
+  }
+  if(what==='nda'){e.thread.push(['sys',now,'NDA sent for signature — the buyer gets a link by email']);e.st='ndasent';e.nda='Sent, awaiting signature';}
+  if(what==='slots'){
+    const box=$('#slots');
+    if(box)box.innerHTML=`<div class="slots">${SLOTS.map(s=>`<button class="tpl" onclick="enqAct('${id}','viewing','${s}')">${s}</button>`).join('')}</div>`;
+    return;
+  }
+  if(what==='viewing'){e.thread.push(['sys',now,'Viewing proposed: '+arg+' — invitation sent to the buyer']);e.st='viewing';}
+  if(what==='loi'){e.thread.push(['sys',now,'LOI marked as signed — due diligence started']);e.st='loi';}
+  if(what==='lost'){e.thread.push(['sys',now,'Marked as lost — the buyer stays in your history']);e.st='lost';}
+  if(what==='reveal'){e.shared=true;e.thread.push(['sys',now,'You shared your direct contacts with the buyer']);}
+  redrawEnq(e);
+}
+function setEnqSt(id,v){const e=ENQ.find(x=>x.id===id);if(e){e.st=v;redrawEnq(e);}}
+function bindAcc(){
+  document.querySelectorAll('.stfilter button').forEach(b=>b.onclick=()=>{ACC.f=b.dataset.f;$('#accbody').innerHTML=accBody();bindAcc();});
+  document.querySelectorAll('tr.erow').forEach(r=>r.onclick=()=>openEnq(r.dataset.e));
+  document.querySelectorAll('.sw').forEach(s=>{s.onclick=()=>s.classList.toggle('on');s.onkeydown=e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();s.classList.toggle('on');}}});
+}
+
+/* =============== ADVISORY =============== */
+function advisoryPage(){
+  return `
+  <div class="phead" style="padding-bottom:64px"><div class="grid-bg"></div><div class="glow"></div><div class="wrap">
+    <p class="eyebrow">OKKO Capital</p>
+    <h1>The advisory behind<br>the marketplace.</h1>
+    <p class="sub">OKKO Capital is a Dubai-based deal advisory. We sell businesses and raise capital under retained mandates, and we built OKKO CAP so that every deal, big or small, has a place to transact.</p>
+    <div class="cta" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:28px">
+      <button class="btn btn-w btn-lg" onclick="openContact('petit-paradis')">Discuss a mandate${ic()}</button>
+      <a class="btn btn-gh btn-lg" href="mailto:sales@okkocap.com">sales@okkocap.com${ic()}</a>
+    </div>
+  </div></div>
+
+  <section class="sec"><div class="wrap">
+    <div class="sec-hd"><div><p class="eyebrow">Sell-side mandate</p><h2>How a mandate runs</h2>
+      <p class="sd">A three-month retained process, run through our CRM with weekly reporting to the owner.</p></div></div>
+    <div class="steps">
+      <div class="step"><b class="n">Month 1</b><h3>Packaging &amp; market test</h3><p>Photo shoot, teaser, pitch deck, financial model. Paid campaigns go live and the funnel starts filling.</p></div>
+      <div class="step"><b class="n">Month 2</b><h3>Buyers &amp; LOI</h3><p>Scaling ads, qualified viewings, NDAs and negotiations, driving to a signed LOI and close.</p></div>
+      <div class="step"><b class="n">Month 3</b><h3>Handover</h3><p>Structured transfer of the business, team and systems to the new owner.</p></div>
+    </div>
+  </div></section>
+
+  <section class="sec dk" style="padding-top:0"><div class="wrap" style="padding-top:70px;border-top:1px solid var(--line-d)">
+    <div class="twocol">
+      <div class="offer d">
+        <p class="eyebrow">Mandate</p>
+        <h3>Run the deal for me</h3>
+        <p class="od">Retainer plus success fee. We package, market, qualify and close — you stay in the business while the process runs.</p>
+        <ul><li>Full deal packaging and data room</li><li>Paid buyer acquisition and CRM funnel</li><li>Negotiation support to LOI and close</li></ul>
+        <button class="btn btn-b" onclick="openContact('petit-paradis')">Discuss a mandate${ic()}</button>
+      </div>
+      <div class="offer d">
+        <p class="eyebrow">Self-service</p>
+        <h3>I will run it myself</h3>
+        <p class="od">List on the marketplace for a flat fee, keep every enquiry, pay no commission on the transaction.</p>
+        <ul><li>AED 499 a month or AED 999 for three</li><li>Standard card format with video tour</li><li>Dashboard with views and enquiries</li></ul>
+        <a class="btn btn-gh" href="#/list">Create a listing${ic()}</a>
+      </div>
+    </div>
+  </div></section>`;
+}
+
+/* =============== ROUTER =============== */
+function route(){
+  const h=location.hash.replace(/^#\/?/,'');
+  const app=$('#app');
+  closeModal();
+  if(h.startsWith('deal/')){renderHeader('market');app.innerHTML=dealPage(h.slice(5));}
+  else if(h.startsWith('market')){
+    const q=new URLSearchParams(h.split('?')[1]||'');
+    if(q.get('t'))FS.type=q.get('t');
+    renderHeader('market');app.innerHTML=marketPage();bindMarket();
+  }
+  else if(h==='list'){W.step=0;renderHeader('list');app.innerHTML=listPage();bindWiz();}
+  else if(h==='account'||h.startsWith('account/')){
+    const t=h.split('/')[1]||'overview';
+    ACC.tab=TABS.some(x=>x[0]===t)?t:'overview';
+    renderHeader('account');app.innerHTML=accountPage();bindAcc();
+  }
+  else if(h==='login'){renderHeader('login');app.innerHTML=loginPage();}
+  else if(h==='advisory'){renderHeader('advisory');app.innerHTML=advisoryPage();}
+  else{renderHeader('home');app.innerHTML=homePage();}
+  window.scrollTo({top:0,behavior:'instant'});
+  onScroll();
+}
+const hdr=document.getElementById('hdr');
+function onScroll(){hdr.classList.toggle('stuck',window.scrollY>24);}
+addEventListener('scroll',onScroll,{passive:true});
+addEventListener('hashchange',route);
+renderFooter();
+route();
+</script>
+</body>
+</html>
