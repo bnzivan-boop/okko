@@ -1,2 +1,5 @@
 .DS_Store
 assets/*/_src/
+config.js
+backend/.env*.local
+node_modules/
